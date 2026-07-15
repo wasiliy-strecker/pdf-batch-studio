@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PDF Batch Community</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" th:href="@{/}">PDF Batch <span>Community</span></a>
+      <nav>
+        <a th:href="@{/swagger-ui.html}">API</a>
+        <a href="https://github.com/appfabrik/pdf-batch-community">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="page narrow">
+      <section class="hero">
+        <p class="eyebrow">Open-source document automation</p>
+        <h1>Turn CSV rows into ready-to-send PDFs.</h1>
+        <p class="lead">
+          Upload an AcroForm PDF and a UTF-8 CSV, map their fields, preview the
+          first row, and generate up to 25 personalized documents locally.
+        </p>
+      </section>
+
+      <section class="card upload-card">
+        <div>
+          <p class="step">New batch</p>
+          <h2>Choose your files</h2>
+          <p>No account is required. Local files are deleted automatically after one hour.</p>
+        </div>
+        <form th:action="@{/web/jobs}" method="post" enctype="multipart/form-data">
+          <label>
+            <span>AcroForm PDF template</span>
+            <input type="file" name="template" accept="application/pdf,.pdf" required>
+            <small>Text fields only, maximum 20 MiB.</small>
+          </label>
+          <label>
+            <span>CSV data</span>
+            <input type="file" name="data" accept="text/csv,.csv,.tsv" required>
+            <small>UTF-8 with comma, semicolon, or tab delimiter; maximum 25 rows.</small>
+          </label>
+          <button class="primary" type="submit">Inspect files</button>
+        </form>
+      </section>
+
+      <section class="trust-grid" aria-label="Product guarantees">
+        <article>
+          <strong>No watermark</strong>
+          <span>Generated documents stay useful.</span>
+        </article>
+        <article>
+          <strong>Local by default</strong>
+          <span>Run the complete service yourself.</span>
+        </article>
+        <article>
+          <strong>Auditable results</strong>
+          <span>Every ZIP includes a manifest and error report.</span>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

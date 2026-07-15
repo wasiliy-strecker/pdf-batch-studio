@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: pdf-batch-community
+  profiles:
+    default: local
+  autoconfigure:
+    exclude: org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 26MB
+  thymeleaf:
+    cache: false
+
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+pdf-batch:
+  storage-root: ${PDF_BATCH_STORAGE_ROOT:.local-data/jobs}
+  retention: PT1H
+  cleanup-interval: PT5M
+  limits:
+    max-pdf-bytes: 20971520
+    max-csv-bytes: 5242880
+    max-rows: 25
+    max-pdf-pages: 100
+    max-pdf-fields: 200
+    max-field-value-length: 1000
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: WARN

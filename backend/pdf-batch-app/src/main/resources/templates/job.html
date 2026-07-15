@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="|Batch ${job.id} · PDF Batch Community|">Batch · PDF Batch Community</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <script defer th:src="@{/webjars/htmx.org/2.0.10/dist/htmx.min.js}"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" th:href="@{/}">PDF Batch <span>Community</span></a>
+      <nav><a th:href="@{/swagger-ui.html}">API</a></nav>
+    </header>
+
+    <main class="page">
+      <div class="job-heading">
+        <div>
+          <p class="eyebrow">Batch job</p>
+          <h1>Map, preview, generate.</h1>
+          <p class="job-id" th:text="${job.id}">job-id</p>
+        </div>
+        <span class="status-pill" th:text="${job.status}">DRAFT</span>
+      </div>
+
+      <p class="flash" th:if="${message}" th:text="${message}">Saved.</p>
+
+      <section class="summary-grid">
+        <article><span>PDF pages</span><strong th:text="${job.pageCount}">1</strong></article>
+        <article><span>CSV rows</span><strong th:text="${job.totalRows}">2</strong></article>
+        <article><span>Delimiter</span><strong th:text="${delimiterName}">Comma</strong></article>
+        <article><span>Expires</span><strong th:text="${formattedExpiry}">Expiry time</strong></article>
+      </section>
+
+      <section class="card" th:if="${job.status.name() == 'DRAFT' or job.status.name() == 'READY'}">
+        <div class="section-heading">
+          <div>
+            <p class="step">Step 1</p>
+            <h2>Map PDF fields to CSV columns</h2>
+          </div>
+          <span th:text="|${job.pdfFields.size()} fields found|">Fields found</span>
+        </div>
+
+        <form th:action="@{|/web/jobs/${job.id}/configuration|}" method="post">
+          <div class="mapping-table">
+            <div class="mapping-row mapping-header">
+              <span>PDF field</span><span>CSV column</span><span>Support</span>
+            </div>
+            <div class="mapping-row" th:each="field : ${job.pdfFields}">
+              <input type="hidden" name="pdfField" th:value="${field.name}">
+              <code th:text="${field.name}">CustomerName</code>
+              <select name="csvColumn" th:disabled="${!field.supported}">
+                <option value="">Do not fill</option>
+                <option th:each="header : ${job.csvHeaders}"
+                        th:value="${header}"
+                        th:text="${header}"
+                        th:selected="${mappingByField[field.name] == header}">
+                  CustomerName
+                </option>
+              </select>
+              <input th:if="${!field.supported}" type="hidden" name="csvColumn" value="">
+              <span class="support" th:classappend="${field.supported} ? 'ok' : 'no'"
+                    th:text="${field.supported} ? 'Text' : 'Unsupported'">Text</span>
+            </div>
+          </div>
+
+          <label class="filename-field">
+            <span>Output filename pattern</span>
+            <input type="text" name="filenamePattern" maxlength="512"
+                   th:value="${job.filenamePattern}" required>
+            <small>Use <code>{rowNumber}</code> or a CSV header such as <code>{CustomerId}</code>.</small>
+          </label>
+          <button class="primary" type="submit">Save mapping</button>
+        </form>
+      </section>
+
+      <section class="card" th:if="${job.status.name() == 'READY'}">
+        <div class="section-heading">
+          <div>
+            <p class="step">Step 2</p>
+            <h2>Preview and start</h2>
+          </div>
+          <span>Uses the first CSV row</span>
+        </div>
+        <div class="actions">
+          <form th:action="@{|/api/v1/jobs/${job.id}/preview|}" method="post" target="_blank">
+            <button class="secondary" type="submit">Open PDF preview</button>
+          </form>
+          <form th:action="@{|/web/jobs/${job.id}/process|}" method="post">
+            <button class="primary" type="submit">Generate PDF batch</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="job-status" class="card status-card" th:fragment="status"
+               th:attr="hx-get=${job.status.active} ? @{|/jobs/${job.id}/status|} : null,
+                        hx-trigger=${job.status.active} ? 'every 1s' : null"
+               hx-swap="outerHTML">
+        <div class="section-heading">
+          <div>
+            <p class="step">Processing</p>
+            <h2 th:text="${#strings.replace(job.status.name(), '_', ' ')}">PROCESSING</h2>
+          </div>
+          <strong th:text="|${job.processedRows}/${job.totalRows} rows|">0/2 rows</strong>
+        </div>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+             th:attr="aria-valuenow=${job.totalRows == 0 ? 0 : (job.processedRows * 100 / job.totalRows)}">
+          <div class="progress-value"
+               th:style="|width: ${job.totalRows == 0 ? 0 : (job.processedRows * 100 / job.totalRows)}%|"></div>
+        </div>
+        <div class="result-counts">
+          <span><strong th:text="${job.successfulRows}">0</strong> successful</span>
+          <span><strong th:text="${job.failedRows}">0</strong> failed</span>
+        </div>
+
+        <div class="actions" th:if="${job.status.active}">
+          <form th:action="@{|/web/jobs/${job.id}/cancel|}" method="post">
+            <button class="danger" type="submit">Cancel job</button>
+          </form>
+        </div>
+
+        <div class="completion" th:if="${job.status.name() == 'COMPLETED' or job.status.name() == 'COMPLETED_WITH_ERRORS'}">
+          <p>Your ZIP contains the generated PDFs, manifest.json, and errors.csv.</p>
+          <a class="button primary" th:href="@{|/api/v1/jobs/${job.id}/result|}">Download result ZIP</a>
+        </div>
+
+        <div class="error-box" th:if="${job.status.name() == 'FAILED'}">
+          <strong th:text="${job.failureCode}">PROCESSING_FAILED</strong>
+          <p th:text="${job.failureMessage}">Document processing failed</p>
+        </div>
+      </section>
+
+      <section class="danger-zone" th:if="${!job.status.active}">
+        <form th:action="@{|/web/jobs/${job.id}/delete|}" method="post">
+          <button class="text-button" type="submit">Delete this job and all local files</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

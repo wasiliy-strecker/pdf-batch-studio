@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: ${PDF_BATCH_DATABASE_URL:jdbc:postgresql://127.0.0.1:54329/pdfbatch}
+    username: ${PDF_BATCH_DATABASE_USER:pdfbatch}
+    password: ${PDF_BATCH_DATABASE_PASSWORD:pdfbatch_local}
+    driver-class-name: org.postgresql.Driver

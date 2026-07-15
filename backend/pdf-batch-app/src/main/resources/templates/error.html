@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Unable to continue · PDF Batch Community</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" th:href="@{/}">PDF Batch <span>Community</span></a>
+    </header>
+    <main class="page narrow">
+      <section class="card error-page">
+        <p class="eyebrow">Unable to continue</p>
+        <h1>Check the files and try again.</h1>
+        <p th:text="${message}">The uploaded document could not be processed.</p>
+        <a class="button primary" th:href="@{/}">Start a new batch</a>
+      </section>
+    </main>
+  </body>
+</html>

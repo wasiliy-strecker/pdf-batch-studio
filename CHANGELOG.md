@@ -7,6 +7,8 @@ Changelog, and releases will use semantic versioning.
 
 ### Added
 
+- Safe comma, semicolon, tab, UTF-8, filename-collision, row-limit, and invalid
+  CSV samples for manual product testing.
 - Java 21 and Spring Boot 4.1 modular-monolith foundation.
 - AcroForm and CSV inspection, mapping validation, preview, batch generation,
   safe ZIP output, progress, cancellation, and retention cleanup.

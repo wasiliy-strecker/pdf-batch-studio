@@ -9,9 +9,10 @@ documents.
 
 ## Trust boundaries
 
-The PDF, CSV, multipart metadata, API JSON, and original filenames are
-untrusted. The database, configured storage root, application binary, and
-operator-provided environment variables are trusted administrative inputs.
+The PDF, CSV, multipart metadata, API JSON, desktop-selected paths, and original
+filenames are untrusted. The database, configured storage root, application
+binary, and operator-provided environment variables are trusted administrative
+inputs.
 
 ```mermaid
 flowchart LR
@@ -21,6 +22,8 @@ flowchart LR
     J --> W[bounded worker]
     W --> Z[safe ZIP writer]
     J --> C[retention cleanup]
+    D[Desktop file chooser] --> V
+    J --> T[desktop session temp directory]
 ```
 
 ## Implemented controls
@@ -40,6 +43,9 @@ flowchart LR
 - CSP, `X-Content-Type-Options`, and Spring Security defaults
 - generic processing failures in persisted public status
 - placeholder-only `.env.example`
+- desktop operation without HTTP, telemetry, accounts, or persistent database
+- per-launch desktop temporary root and atomic result export where supported
+- desktop cleanup after export, cancellation, failure, and normal shutdown
 
 ## Residual risks and deployment assumptions
 
@@ -53,6 +59,9 @@ flowchart LR
   appropriate host permissions where documents are sensitive.
 - A crash can leave an in-progress job until cleanup. Startup reconciliation is
   a roadmap item.
+- An operating-system or power crash can leave a desktop session directory in
+  the system temporary area. It contains only the files selected for that local
+  job and is never uploaded by the application.
 - Malware scanning, sandboxed document workers, rate limiting, and audit logs
   are outside the current local MVP.
 

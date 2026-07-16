@@ -21,6 +21,11 @@ This repository is the single source of truth for all shared functionality. It
 must always build and run without PRO access. Private code must never be copied
 back into Community or hidden behind an unavailable private dependency.
 
+The offline JavaFX application is another public Community delivery adapter in
+this repository. It uses the same public domain/document modules and the same
+25-row limit. A future private desktop edition must consume a released public
+version rather than adding hidden dependencies or license logic here.
+
 The future PRO repository should pin an exact released Community version. The
 preferred steady-state boundary is versioned Maven artifacts for public Java
 modules. A temporary Git submodule is acceptable only for the first private

@@ -16,6 +16,7 @@ endpoints, or private PRO implementations. Safe generated fixtures belong in
 - `pdf-batch-document`: PDFBox, Commons CSV, ZIP, and filesystem adapters.
 - `pdf-batch-persistence`: JPA entities, repositories, and Flyway migrations.
 - `pdf-batch-app`: Spring Boot wiring, REST API, web UI, and configuration.
+- `pdf-batch-desktop`: JavaFX UI and offline desktop-only adapters.
 
 Dependencies point inward. Core must not import Spring, JPA, PDFBox, or web
 types. Keep the initial product a modular monolith with one bounded worker.
@@ -27,6 +28,8 @@ Run from the repository root:
 ```bash
 ./scripts/test-all.sh
 ./scripts/dev.sh
+./scripts/desktop-dev.sh
+./scripts/package-desktop.sh app-image
 ./scripts/generate-sample.sh
 ```
 
@@ -39,6 +42,8 @@ workflow tests must pass.
 - Add or update a focused test for behavior changes.
 - Keep `/api/v1` backward compatible unless a documented breaking version is
   intentionally introduced.
+- Keep the desktop module free of Spring, JPA, databases, network clients, and
+  private PRO dependencies.
 - Never trust upload filenames or use them as paths.
 - Keep streaming CSV iteration, bounded queues, generated UUID directories,
   deterministic ZIP entry names, and cleanup behavior intact.

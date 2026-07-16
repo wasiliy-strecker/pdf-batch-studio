@@ -1,13 +1,17 @@
 # Architecture
 
-PDF Batch Community is a Java 21 modular monolith. Its module boundaries keep
-document processing and use cases independent of Spring Boot so a separate
-worker can be introduced later without rewriting the domain.
+PDF Batch Community is a Java 21 modular monolith with two delivery adapters: a
+Spring Boot web application and an offline JavaFX desktop application. Its
+module boundaries keep document processing and use cases independent of both UI
+frameworks so a separate worker can be introduced later without rewriting the
+domain.
 
 ```mermaid
 flowchart LR
     Browser[Thymeleaf + HTMX UI] --> API[Spring MVC /api/v1]
+    Desktop[JavaFX desktop UI] --> DesktopAdapter[In-memory repository + local dispatcher]
     API --> App[Application services]
+    DesktopAdapter --> App
     App --> Domain[Domain model]
     App --> DocPort[DocumentEngine port]
     App --> RepoPort[JobRepository port]
@@ -18,6 +22,7 @@ flowchart LR
     StorePort --> Files[(isolated job directories)]
     App --> Queue[bounded in-process worker]
     Queue --> PDF
+    DesktopAdapter --> Temp[(session temp workspace)]
 ```
 
 ## Module responsibilities
@@ -43,6 +48,13 @@ creation mechanism. The adapter shields the core from JPA.
 Wires adapters, exposes REST/OpenAPI and the server-rendered UI, applies HTTP
 security headers and request limits, runs retention cleanup, and owns the
 single-thread bounded dispatcher.
+
+### `pdf-batch-desktop`
+
+Owns the JavaFX/FXML/CSS interface, desktop ViewModel, defensive in-memory job
+repository, single-thread dispatcher, PDF-to-PNG preview rendering, temporary
+session workspace, and result export. It depends only on `pdf-batch-core` and
+`pdf-batch-document`; it does not depend on Spring, JPA, H2, or PostgreSQL.
 
 ## Workflow
 
@@ -89,6 +101,18 @@ The default `local` profile uses an H2 file database in PostgreSQL compatibility
 mode for a zero-setup test loop. `postgres` uses PostgreSQL 17 through Docker
 Compose. Both use the same Flyway migration and Hibernate schema validation.
 H2 is deliberately not presented as the future hosted deployment database.
+
+## Offline desktop lifecycle
+
+The desktop composition uses the same `JobApplicationService`, `JobWorker`,
+`DocumentEngine`, state transitions, limits, and collision-safe ZIP generation
+as the web application. Selected files are copied into a UUID job below a
+per-launch operating-system temporary directory. After a terminal job, the ZIP
+is copied atomically where possible to the user-selected path, then job inputs,
+intermediate output, repository state, and the session directory are deleted.
+
+No network client is present in the desktop module. One job and one worker are
+allowed at a time, and the Community row limit remains 25.
 
 ## Scaling seam
 

@@ -3,8 +3,8 @@
 ## Development setup
 
 Use a full JDK 21 and the checked-in Maven Wrapper. Start the zero-setup local
-profile with `./scripts/dev.sh` and run all checks with
-`./scripts/test-all.sh`.
+profile with `./scripts/dev.sh`, start the offline JavaFX app with
+`./scripts/desktop-dev.sh`, and run all checks with `./scripts/test-all.sh`.
 
 ## Change expectations
 
@@ -13,6 +13,7 @@ profile with `./scripts/dev.sh` and run all checks with
 3. Never use real customer documents as fixtures.
 4. Run `./mvnw verify` before opening a pull request.
 5. Update user-facing docs and `CHANGELOG.md` when appropriate.
+6. For desktop UI changes, run the FXML smoke test and include a safe screenshot.
 
 Commits should use short imperative subjects, for example `Validate duplicate
 CSV headers`. Pull requests should explain the problem, approach, verification

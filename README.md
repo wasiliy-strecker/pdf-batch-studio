@@ -1,8 +1,10 @@
 # PDF Batch Community
 
 PDF Batch Community turns rows from a UTF-8 CSV file into personalized PDFs.
-It inspects an interactive AcroForm template, lets the user map CSV columns to
-text fields, previews the first record, and creates a downloadable ZIP archive.
+It is available as a self-hosted Spring Boot web application and as a fully
+offline JavaFX desktop application for Windows and macOS. Both inspect an
+interactive AcroForm template, map CSV columns to text fields, preview the first
+record, and create a ZIP archive.
 
 The Community edition is a complete self-hosted application. It has no login,
 license check, watermark, payment integration, or private dependency.
@@ -21,8 +23,9 @@ license check, watermark, payment integration, or private dependency.
 - automatic one-hour retention and idempotent cleanup
 - local H2 persistence for zero-setup testing
 - PostgreSQL, Docker Compose, Flyway, REST/OpenAPI, and a responsive web UI
+- native JavaFX desktop UI with no server, database, account, or network access
 
-## Quick start: no Docker required
+## Quick start: local web application
 
 Requirements:
 
@@ -46,6 +49,41 @@ Try the checked-in files:
 - map `fullName` to `name`
 - map `customerNumber` to `customerId`
 - use `{customerId}-{name}.pdf` as the filename pattern
+
+## Quick start: offline desktop application
+
+Run the JavaFX application on Linux or macOS:
+
+```bash
+./scripts/desktop-dev.sh
+```
+
+On Windows PowerShell:
+
+```powershell
+.\scripts\desktop-dev.ps1
+```
+
+The desktop application runs the shared Java document engine directly. It does
+not start Spring Boot, open a network port, or use H2/PostgreSQL. Inputs are
+copied into an isolated operating-system temporary directory and removed after
+export, cancellation, failure, or normal application shutdown. Only the ZIP
+location selected by the user persists.
+
+![PDF Batch Desktop](docs/screenshots/pdf-batch-desktop.png)
+
+### Native packages
+
+Create and smoke-test a local application image with:
+
+```bash
+./scripts/package-desktop.sh app-image
+```
+
+Windows uses `scripts/package-desktop.ps1`. The `Desktop packages` GitHub
+Actions workflow creates a Windows x64 EXE plus macOS ARM64 and Intel DMGs on
+their respective operating systems. The first release packages are intentionally
+unsigned, so Windows SmartScreen or macOS Gatekeeper may show a warning.
 
 ## PostgreSQL with Docker Compose
 
@@ -84,6 +122,7 @@ Useful individual commands:
 ./mvnw verify
 ./mvnw -pl backend/pdf-batch-document -am test
 ./mvnw -pl backend/pdf-batch-app -am test
+./mvnw -pl desktop/pdf-batch-desktop -am test
 ./scripts/generate-sample.sh
 ```
 
@@ -111,6 +150,8 @@ pdf-batch-community/
 │   ├── pdf-batch-document/      PDFBox, CSV, ZIP, and local files
 │   ├── pdf-batch-persistence/   JPA, PostgreSQL, and Flyway
 │   └── pdf-batch-app/           Spring Boot, REST, Thymeleaf, and HTMX
+├── desktop/
+│   └── pdf-batch-desktop/       JavaFX offline application and adapters
 ├── docs/                        ADRs, API notes, and portfolio case study
 ├── infrastructure/              production-shaped container image
 ├── samples/                     safe PDF and CSV files
@@ -133,6 +174,7 @@ future private PRO product will also be a separate repository; see
   UUIDs act as unguessable handles, not as user authentication.
 - The local H2 profile is a convenience environment, not the future hosted
   production database.
+- Desktop installers are not yet code-signed, notarized, or auto-updating.
 
 ## License
 

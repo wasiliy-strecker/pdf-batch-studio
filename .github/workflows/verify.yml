@@ -20,6 +20,6 @@ jobs:
           java-version: "21"
           cache: maven
       - name: Verify all modules
-        run: ./mvnw --batch-mode --no-transfer-progress verify
+        run: xvfb-run -a ./mvnw --batch-mode --no-transfer-progress verify
       - name: Build container image
         run: docker build -f infrastructure/Dockerfile -t pdf-batch-community:test .

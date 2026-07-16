@@ -8,19 +8,22 @@ copy/paste is slow and difficult to audit.
 
 ## Product outcome
 
-PDF Batch Community implements the whole local workflow: inspect an AcroForm
-and CSV, map fields, preview real output, run a bounded asynchronous batch, and
-download a deterministic archive with machine-readable and human-readable
-reports.
+PDF Batch Community implements the whole local workflow twice over one shared
+core: as a self-hosted Spring Boot application and as a native offline JavaFX
+application. Both inspect an AcroForm and CSV, map fields, preview real output,
+run a bounded asynchronous batch, and create a deterministic archive with
+machine-readable and human-readable reports.
 
 ## Engineering highlights
 
 - framework-free domain state machine with explicit transitions
-- ports and adapters across a four-module Maven build
+- ports and adapters across a five-module Maven build
 - semantic PDF tests instead of brittle binary comparisons
 - strict upload, path, filename, ZIP, queue, and retention boundaries
 - normalized persistence with Flyway and PostgreSQL integration coverage
 - server-rendered progressive UI plus a versioned REST/OpenAPI API
+- JavaFX/FXML/CSS desktop UI with an in-memory adapter and no network dependency
+- `jpackage` app images and CI-native Windows/macOS installer builds
 - reproducible safe PDF fixture generation
 - public Community/private PRO repository boundary designed before paid code
 
@@ -29,7 +32,9 @@ reports.
 The end-to-end test creates a real AcroForm, uploads it through HTTP with a CSV,
 saves mappings, verifies the preview value with PDFBox, waits for background
 processing, downloads the ZIP, and checks every entry path and expected PDF.
-The same workflow was also exercised manually against the running local app.
+The offline end-to-end test independently runs the shared engine without HTTP or
+a database, exports a ZIP, and semantically checks generated PDFs. The packaged
+desktop launcher is smoke-tested before installer creation.
 
 ## Trade-offs
 

@@ -33,6 +33,7 @@
     <module>backend/pdf-batch-document</module>
     <module>backend/pdf-batch-persistence</module>
     <module>backend/pdf-batch-app</module>
+    <module>desktop/pdf-batch-desktop</module>
   </modules>
 
   <properties>
@@ -45,6 +46,8 @@
     <commons-csv.version>1.14.1</commons-csv.version>
     <springdoc.version>3.0.3</springdoc.version>
     <htmx.version>2.0.10</htmx.version>
+    <javafx.version>21.0.11</javafx.version>
+    <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
   </properties>
 
   <dependencyManagement>

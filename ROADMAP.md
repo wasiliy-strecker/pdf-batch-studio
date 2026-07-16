@@ -11,6 +11,8 @@
 
 ## Community improvements
 
+- code signing, macOS notarization, and opt-in desktop update checks
+- native drag-and-drop and remembered non-sensitive folder preferences
 - optional server-sent events after polling remains the tested fallback
 - accessibility audit and additional browser workflow tests
 - more AcroForm appearance/font compatibility fixtures

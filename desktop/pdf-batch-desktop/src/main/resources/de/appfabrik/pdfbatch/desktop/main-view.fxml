@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="rootPane"
+      prefHeight="780.0"
+      prefWidth="1180.0"
+      stylesheets="@desktop.css"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header">
+            <children>
+                <VBox spacing="2.0">
+                    <children>
+                        <Label styleClass="eyebrow" text="APPFABRIK COMMUNITY" />
+                        <Label styleClass="app-title" text="PDF Batch Desktop" />
+                    </children>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label styleClass="offline-badge" text="●  OFFLINE" />
+            </children>
+            <padding>
+                <Insets bottom="18.0" left="26.0" right="26.0" top="18.0" />
+            </padding>
+        </HBox>
+
+        <SplitPane dividerPositions="0.56" VBox.vgrow="ALWAYS">
+            <items>
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+                    <content>
+                        <VBox spacing="18.0" styleClass="workspace-column">
+                            <padding>
+                                <Insets bottom="28.0" left="26.0" right="20.0" top="24.0" />
+                            </padding>
+                            <children>
+                                <VBox spacing="12.0" styleClass="card">
+                                    <children>
+                                        <Label styleClass="section-kicker" text="STEP 1" />
+                                        <Label styleClass="section-title" text="Choose local files" />
+                                        <Label styleClass="body-copy" text="Your documents stay on this computer. Select an interactive AcroForm PDF and UTF-8 CSV or TSV data." wrapText="true" />
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <Button fx:id="templateButton" onAction="#chooseTemplate" styleClass="secondary-button" text="Choose PDF…" />
+                                                <Label fx:id="templatePathLabel" maxWidth="1.7976931348623157E308" styleClass="file-label" text="No PDF selected" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <Button fx:id="csvButton" onAction="#chooseCsv" styleClass="secondary-button" text="Choose CSV…" />
+                                                <Label fx:id="csvPathLabel" maxWidth="1.7976931348623157E308" styleClass="file-label" text="No CSV selected" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <Button fx:id="inspectButton" onAction="#inspectFiles" styleClass="primary-button" text="Inspect files" />
+                                    </children>
+                                </VBox>
+
+                                <VBox spacing="12.0" styleClass="card">
+                                    <children>
+                                        <Label styleClass="section-kicker" text="STEP 2" />
+                                        <Label styleClass="section-title" text="Map fields" />
+                                        <Label fx:id="inspectionLabel" styleClass="body-copy" text="Select an AcroForm PDF and a UTF-8 CSV to begin." wrapText="true" />
+                                        <VBox fx:id="mappingRows" spacing="8.0" />
+                                        <Separator />
+                                        <Label styleClass="field-label" text="Output filename pattern" />
+                                        <TextField fx:id="filenamePatternField" promptText="{customerId}-{name}.pdf" />
+                                        <Label styleClass="hint" text="Use CSV headers in braces or {rowNumber}. Unsafe filename characters are sanitized." wrapText="true" />
+                                        <HBox spacing="10.0">
+                                            <children>
+                                                <Button fx:id="previewButton" onAction="#generatePreview" styleClass="secondary-button" text="Generate preview" />
+                                                <Button fx:id="outputButton" onAction="#chooseOutput" styleClass="secondary-button" text="Choose result ZIP…" />
+                                            </children>
+                                        </HBox>
+                                        <TextField fx:id="outputPathField" promptText="No result location selected" />
+                                        <Button fx:id="startButton" onAction="#startBatch" styleClass="primary-button" text="Start local batch" />
+                                    </children>
+                                </VBox>
+
+                                <VBox fx:id="errorBox" spacing="4.0" styleClass="error-box" visible="false" managed="false">
+                                    <children>
+                                        <Label fx:id="errorCodeLabel" styleClass="error-code" />
+                                        <Label fx:id="errorMessageLabel" styleClass="error-message" wrapText="true" />
+                                    </children>
+                                </VBox>
+
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                        <Button fx:id="resetButton" onAction="#resetWorkflow" styleClass="quiet-button" text="New batch" />
+                                        <Label fx:id="operationLabel" styleClass="hint" text="All processing stays on this computer." />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+
+                <VBox spacing="18.0" styleClass="preview-column">
+                    <padding>
+                        <Insets bottom="28.0" left="22.0" right="26.0" top="24.0" />
+                    </padding>
+                    <children>
+                        <VBox spacing="10.0" styleClass="status-card">
+                            <children>
+                                <Label styleClass="section-kicker" text="LOCAL JOB" />
+                                <Label fx:id="statusLabel" styleClass="status-title" text="Waiting for files" />
+                                <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" progress="0.0" />
+                                <Label fx:id="progressDetailLabel" styleClass="hint" text="No active batch" wrapText="true" />
+                                <Button fx:id="cancelButton" onAction="#cancelBatch" styleClass="danger-button" text="Cancel processing" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="TOP_CENTER" spacing="12.0" styleClass="preview-card" VBox.vgrow="ALWAYS">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label styleClass="section-title" text="First-row preview" />
+                                    </children>
+                                </HBox>
+                                <Label styleClass="hint" text="The first page appears here after mapping validation." />
+                                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" VBox.vgrow="ALWAYS">
+                                    <content>
+                                        <VBox alignment="TOP_CENTER" styleClass="preview-surface">
+                                            <padding>
+                                                <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+                                            </padding>
+                                            <children>
+                                                <ImageView fx:id="previewImage" fitWidth="430.0" preserveRatio="true" smooth="true" />
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </ScrollPane>
+                            </children>
+                        </VBox>
+
+                        <VBox fx:id="resultBox" spacing="10.0" styleClass="result-box" visible="false" managed="false">
+                            <children>
+                                <Label styleClass="section-title" text="Result ready" />
+                                <Label fx:id="resultLabel" styleClass="body-copy" wrapText="true" />
+                                <HBox spacing="8.0">
+                                    <children>
+                                        <Button fx:id="saveResultButton" onAction="#saveResult" styleClass="primary-button" text="Save result ZIP" />
+                                        <Button fx:id="openZipButton" onAction="#openResultZip" styleClass="secondary-button" text="Open ZIP" />
+                                        <Button fx:id="openFolderButton" onAction="#openResultFolder" styleClass="secondary-button" text="Open folder" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </items>
+        </SplitPane>
+    </children>
+</VBox>

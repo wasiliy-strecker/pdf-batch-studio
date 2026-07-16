@@ -1,0 +1,221 @@
+.root {
+    -fx-font-family: "Inter", "Segoe UI", "SF Pro Text", sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #f4f6fa;
+    -fx-text-fill: #172033;
+}
+
+.header {
+    -fx-background-color: linear-gradient(to right, #111a2d, #1b2945);
+}
+
+.eyebrow,
+.section-kicker {
+    -fx-font-size: 10px;
+    -fx-font-weight: 800;
+    -fx-letter-spacing: 1.2px;
+    -fx-text-fill: #ec7a38;
+}
+
+.app-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+}
+
+.offline-badge {
+    -fx-background-color: rgba(53, 184, 124, 0.16);
+    -fx-background-radius: 999px;
+    -fx-border-color: rgba(90, 220, 155, 0.36);
+    -fx-border-radius: 999px;
+    -fx-padding: 7px 12px;
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #83e5b5;
+}
+
+.split-pane,
+.scroll-pane,
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.split-pane > .split-pane-divider {
+    -fx-background-color: #dfe4ed;
+    -fx-padding: 0 1px;
+}
+
+.workspace-column {
+    -fx-background-color: #f4f6fa;
+}
+
+.preview-column {
+    -fx-background-color: #eef1f6;
+}
+
+.card,
+.status-card,
+.preview-card,
+.result-box {
+    -fx-background-color: white;
+    -fx-background-radius: 14px;
+    -fx-border-color: #e0e5ee;
+    -fx-border-radius: 14px;
+    -fx-padding: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(23, 32, 51, 0.06), 14, 0, 0, 3);
+}
+
+.status-card {
+    -fx-background-color: #16213a;
+    -fx-border-color: #243455;
+}
+
+.status-card .section-kicker {
+    -fx-text-fill: #f39a61;
+}
+
+.status-card .hint {
+    -fx-text-fill: #aebbd1;
+}
+
+.status-title {
+    -fx-font-size: 21px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+}
+
+.section-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #172033;
+}
+
+.body-copy,
+.file-label {
+    -fx-text-fill: #4c5870;
+}
+
+.file-label {
+    -fx-text-overrun: CENTER_ELLIPSIS;
+}
+
+.hint,
+.muted {
+    -fx-font-size: 11px;
+    -fx-text-fill: #778198;
+}
+
+.field-label,
+.mapping-field {
+    -fx-font-weight: 700;
+    -fx-text-fill: #202a3e;
+}
+
+.mapping-row {
+    -fx-background-color: #f7f8fb;
+    -fx-background-radius: 9px;
+    -fx-padding: 10px;
+}
+
+.mapping-row > .vbox {
+    -fx-min-width: 180px;
+}
+
+.text-field,
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #cfd6e2;
+    -fx-border-radius: 8px;
+    -fx-padding: 7px 9px;
+}
+
+.text-field:focused,
+.combo-box:focused {
+    -fx-border-color: #e97836;
+    -fx-effect: dropshadow(gaussian, rgba(233, 120, 54, 0.18), 8, 0, 0, 0);
+}
+
+.button {
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-font-weight: 700;
+    -fx-padding: 9px 14px;
+}
+
+.button:disabled {
+    -fx-opacity: 0.45;
+    -fx-cursor: default;
+}
+
+.primary-button {
+    -fx-background-color: #e97836;
+    -fx-text-fill: white;
+}
+
+.primary-button:hover {
+    -fx-background-color: #d96729;
+}
+
+.secondary-button,
+.quiet-button {
+    -fx-background-color: #eef1f6;
+    -fx-border-color: #d5dce8;
+    -fx-text-fill: #28344b;
+}
+
+.secondary-button:hover,
+.quiet-button:hover {
+    -fx-background-color: #e3e8f0;
+}
+
+.danger-button {
+    -fx-background-color: rgba(239, 93, 93, 0.14);
+    -fx-border-color: rgba(239, 93, 93, 0.38);
+    -fx-text-fill: #ffaaaa;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #2a3958;
+    -fx-background-radius: 999px;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: #e97836;
+    -fx-background-radius: 999px;
+    -fx-background-insets: 0;
+}
+
+.preview-surface {
+    -fx-background-color: #dfe4eb;
+    -fx-min-height: 480px;
+}
+
+.preview-surface .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(20, 29, 45, 0.24), 18, 0, 0, 5);
+}
+
+.error-box {
+    -fx-background-color: #fff1f0;
+    -fx-background-radius: 10px;
+    -fx-border-color: #f1b3af;
+    -fx-border-radius: 10px;
+    -fx-padding: 13px;
+}
+
+.error-code {
+    -fx-font-size: 10px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #b63732;
+}
+
+.error-message {
+    -fx-text-fill: #7d2824;
+}
+
+.result-box {
+    -fx-background-color: #f0fbf5;
+    -fx-border-color: #a8ddc0;
+}

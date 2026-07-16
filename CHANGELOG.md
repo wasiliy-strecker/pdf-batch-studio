@@ -7,6 +7,9 @@ Changelog, and releases will use semantic versioning.
 
 ### Added
 
+- Fully offline JavaFX desktop application with field mapping, semantic PDF
+  preview, progress, cancellation, ZIP export, native packaging scripts, and
+  Windows/macOS package workflows.
 - Safe comma, semicolon, tab, UTF-8, filename-collision, row-limit, and invalid
   CSV samples for manual product testing.
 - Java 21 and Spring Boot 4.1 modular-monolith foundation.

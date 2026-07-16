@@ -3,7 +3,9 @@ WORKDIR /workspace
 COPY .mvn .mvn
 COPY mvnw pom.xml ./
 COPY backend backend
-RUN ./mvnw --batch-mode --no-transfer-progress -DskipTests package
+COPY desktop desktop
+RUN ./mvnw --batch-mode --no-transfer-progress \
+    -pl backend/pdf-batch-app -am -DskipTests package
 
 FROM eclipse-temurin:21-jre-jammy
 RUN useradd --system --uid 10001 --home-dir /var/lib/pdf-batch pdfbatch \

@@ -25,7 +25,8 @@ machine-readable and human-readable reports.
 - JavaFX/FXML/CSS desktop UI with an in-memory adapter and no network dependency
 - `jpackage` app images and CI-native Windows/macOS installer builds
 - reproducible safe PDF fixture generation
-- public Community/private PRO repository boundary designed before paid code
+- complete source-available server and desktop products over one shared core
+- dual-licensing boundary without runtime feature degradation or phone-home
 
 ## Validation
 
@@ -38,7 +39,8 @@ desktop launcher is smoke-tested before installer creation.
 
 ## Trade-offs
 
-Polling, one worker, local files, and a 25-row limit keep the initial release
-understandable and useful. The ports preserve a later path to distributed
+Polling and local files keep the initial release operationally understandable.
+Configurable bounded workers, queues, job capacity, and document safety limits
+make resource use explicit. The ports preserve a later path to distributed
 workers and object storage without pretending that complexity is already
 needed.

@@ -12,8 +12,9 @@ provides desktop-specific in-memory repository, bounded dispatcher, temporary
 workspace, preview renderer, and FXML/CSS UI adapters.
 
 The desktop application is fully offline. It does not embed or start Spring
-Boot, does not call the REST API, and does not use a database. Community limits
-and document validation remain identical across the web and desktop adapters.
+Boot, does not call the REST API, and does not use a database. Document
+validation remains identical across the web and desktop adapters; resource
+limits are configuration rather than product editions.
 
 Native packages are built with the JDK `jpackage` tool on Windows and macOS.
 

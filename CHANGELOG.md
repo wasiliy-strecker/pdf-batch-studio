@@ -17,9 +17,9 @@ Changelog, and releases will use semantic versioning.
 - Java 21 and Spring Boot 4.1 modular-monolith foundation.
 - AcroForm and CSV inspection, mapping validation, preview, batch generation,
   safe ZIP output, progress, cancellation, and retention cleanup.
-- REST/OpenAPI API and responsive Thymeleaf/HTMX Community UI.
+- REST/OpenAPI API and responsive Thymeleaf/HTMX Studio UI.
 - zero-setup local H2 profile and PostgreSQL Docker Compose profile.
 - Flyway persistence, safe samples, automated semantic PDF/ZIP tests, real HTTP
   end-to-end test, and optional PostgreSQL Testcontainers verification.
-- PolyForm Noncommercial license, security model, architecture, repository
-  split, and local development documentation.
+- PolyForm Noncommercial licensing, recruitment evaluation grant, commercial
+  licensing boundary, third-party notices, security model, and architecture.

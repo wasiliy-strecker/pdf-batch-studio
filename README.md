@@ -6,8 +6,9 @@ offline JavaFX desktop application for Windows and macOS. Both inspect an
 interactive AcroForm template, map CSV columns to text fields, preview the first
 record, and create a ZIP archive.
 
-The Community edition is a complete self-hosted application. It has no login,
-license check, watermark, payment integration, or private dependency.
+The public source tree contains the complete product. It has no runtime license
+check, watermark, payment integration, or unavailable dependency. Permitted use
+is governed by the source-available license described below.
 
 ## What works
 
@@ -101,7 +102,7 @@ docker compose down
 
 ![PDF Batch Studio upload screen](docs/screenshots/studio-upload.png)
 
-![Completed Community batch job](docs/screenshots/studio-completed-job.png)
+![Completed Studio batch job](docs/screenshots/studio-completed-job.png)
 
 Use `docker compose down -v` only when you intentionally want to delete the
 local database and job volumes.
@@ -160,10 +161,9 @@ pdf-batch-studio/
 └── compose.yml
 ```
 
-This directory is its own Git repository. It is intentionally a sibling of
-other `app_factory` projects, not a nested module of a shared monorepo. The
-future private PRO product will also be a separate repository; see
-[`REPO_SPLIT.md`](REPO_SPLIT.md).
+This directory is one independent Git repository. Server, desktop, and shared
+core are intentionally released together; see
+[`PRODUCT_STRUCTURE.md`](PRODUCT_STRUCTURE.md).
 
 ## Known limitations
 
@@ -182,6 +182,13 @@ future private PRO product will also be a separate repository; see
 
 Copyright (c) 2026 Wasiliy Strecker.
 
-Source-available under the PolyForm Noncommercial License 1.0.0. Commercial use
-requires a separate written license. See [`LICENSE`](LICENSE), [`NOTICE`](NOTICE),
-and [`LICENSE-DECISION.md`](LICENSE-DECISION.md).
+Source-available under the PolyForm Noncommercial License 1.0.0. It is not open
+source. Recruitment and technical evaluation by companies is additionally
+permitted under [`EVALUATION-GRANT.md`](EVALUATION-GRANT.md). Other commercial
+use requires a separate written agreement; see
+[`COMMERCIAL-LICENSE.md`](COMMERCIAL-LICENSE.md).
+
+The required copyright notice is in [`NOTICE`](NOTICE), the licensing rationale
+is recorded in [`LICENSE-DECISION.md`](LICENSE-DECISION.md), and bundled
+dependencies remain under the licenses listed in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).

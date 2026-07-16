@@ -2,24 +2,26 @@
 
 ## Scope
 
-This repository contains only PDF Batch Studio. It must remain independently
-cloneable, buildable, testable, and useful without access to a private PRO
-repository or AppFabrik production infrastructure.
+This repository contains the complete PDF Batch Studio product. It must remain
+independently cloneable, buildable, testable, and useful without private
+infrastructure, payment services, or unavailable source dependencies.
 
-Do not add credentials, customer files, license secrets, payment code, private
-endpoints, or private PRO implementations. Safe generated fixtures belong in
+Do not add credentials, customer files, license secrets, payment code,
+production endpoints, or private documents. Safe generated fixtures belong in
 `samples/` or test code.
 
 ## Architecture
 
-- `pdf-batch-core`: framework-free domain, application services, and ports.
-- `pdf-batch-document`: PDFBox, Commons CSV, ZIP, and filesystem adapters.
-- `pdf-batch-persistence`: JPA entities, repositories, and Flyway migrations.
-- `pdf-batch-server`: Spring Boot wiring, REST API, web UI, and configuration.
-- `pdf-batch-desktop`: JavaFX UI and offline desktop-only adapters.
+- `core/pdf-batch-core`: framework-free domain, application services, and ports.
+- `core/pdf-batch-document`: PDFBox, Commons CSV, ZIP, and filesystem adapters.
+- `server/pdf-batch-persistence`: JPA entities, repositories, and Flyway.
+- `server/pdf-batch-server`: Spring Boot, REST/OpenAPI, web UI, and configuration.
+- `desktop/pdf-batch-desktop`: JavaFX UI and offline desktop adapters.
 
-Dependencies point inward. Core must not import Spring, JPA, PDFBox, or web
-types. Keep the initial product a modular monolith with one bounded worker.
+Dependencies point inward. Core must not import Spring, JPA, PDFBox, JavaFX, or
+web types. Desktop must not depend on Spring, JPA, a database, or a network
+client. Keep queues, workers, document limits, and file lifecycles bounded and
+configurable.
 
 ## Commands
 
@@ -34,18 +36,20 @@ Run from the repository root:
 ```
 
 Before committing Java changes, run `./mvnw verify`. If Docker is unavailable,
-the PostgreSQL Testcontainers test may skip, but all H2-backed and document
-workflow tests must pass.
+the PostgreSQL Testcontainers test may skip, but all H2-backed, document, HTTP,
+and desktop workflow tests must pass.
 
 ## Change rules
 
 - Add or update a focused test for behavior changes.
-- Keep `/api/v1` backward compatible unless a documented breaking version is
-  intentionally introduced.
-- Keep the desktop module free of Spring, JPA, databases, network clients, and
-  private PRO dependencies.
+- Keep `/api/v1` backward compatible unless a documented version change is
+  intentional.
 - Never trust upload filenames or use them as paths.
-- Keep streaming CSV iteration, bounded queues, generated UUID directories,
-  deterministic ZIP entry names, and cleanup behavior intact.
-- Update `CHANGELOG.md` and relevant docs for user-visible changes.
-- Do not introduce Community-to-PRO dependencies.
+- Preserve streaming CSV iteration, bounded queues, generated UUID directories,
+  deterministic ZIP entry names, and idempotent cleanup.
+- Update `CHANGELOG.md`, architecture/security docs, and safe screenshots for
+  user-visible changes.
+- Keep original product code under PolyForm Noncommercial 1.0.0 and retain the
+  required notice and all third-party notices.
+- Do not accept outside code contributions until the owner has approved an
+  appropriate contributor agreement.

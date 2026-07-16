@@ -1,31 +1,32 @@
 # Roadmap
 
-## Community v0.1 release candidate
+## Studio v0.1 release candidate
 
 - validate the PostgreSQL Testcontainers suite in CI with Docker access
-- add browser screenshots after final visual review
-- add startup reconciliation for interrupted `QUEUED`/`PROCESSING` jobs
-- add rate limiting guidance for public self-hosting
-- run dependency and container vulnerability scans
-- tag `v0.1.0` after repository URL and release ownership are confirmed
+- build all native desktop and server release artifacts from one version
+- publish checksums, CycloneDX SBOMs, and reviewed third-party notices
+- add startup reconciliation for interrupted queued and processing jobs
+- add dependency, container, and source vulnerability scans
+- tag `v0.1.0` only after the public repository and release workflow are ready
 
-## Community improvements
+## Product workflow
 
-- code signing, macOS notarization, and opt-in desktop update checks
-- native drag-and-drop and remembered non-sensitive folder preferences
-- optional server-sent events after polling remains the tested fallback
-- accessibility audit and additional browser workflow tests
-- more AcroForm appearance/font compatibility fixtures
-- operational metrics without document content or personal data
-- documented backup and restore for PostgreSQL deployments
+- saved templates, field mappings, and filename presets
+- searchable processing history and configurable retention
+- native drag-and-drop and remembered non-sensitive desktop preferences
+- optional server-sent events with polling retained as a tested fallback
+- authentication, ownership, API keys, and rate limiting for public hosting
+- accessibility audit and broader browser/desktop workflow coverage
 
-## Private PRO milestones
+## Advanced document automation
 
-The private repository is intentionally deferred. Its first milestone may add
-higher limits, saved templates/mappings, filename presets, history, parallel
-jobs, longer retention, and an adapter for the existing AppFabrik annual-license
-system. See `REPO_SPLIT.md`.
+- flat-PDF text and image overlays
+- signatures, QR codes, barcodes, and conditional content
+- ZIP and batch-folder input
+- webhooks, object storage, team workspaces, and audit events
+- separately deployable workers through the existing ports
+- code signing, Apple notarization, and opt-in desktop update checks
 
-Flat-PDF overlays, images, signatures, QR/barcodes, conditional content, API
-keys, webhooks, teams, object storage, distributed workers, and white-label
-features remain later options rather than initial scope.
+All application capabilities remain part of the Studio codebase. Commercial
+rights, hosted service, support, and signed distribution can be offered under a
+separate agreement without maintaining a reduced public edition.

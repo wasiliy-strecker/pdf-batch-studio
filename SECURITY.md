@@ -36,7 +36,7 @@ flowchart LR
 - strict UTF-8 decoding and delimiter/header/row validation
 - streaming CSV processing and one-PDF-at-a-time output
 - sanitized filenames, case-insensitive collision handling, and safe ZIP paths
-- bounded executor and one active job per process
+- configurable bounded executor, queue, and active-job capacity
 - deterministic resource closing and idempotent result/job deletion
 - one-hour default retention with scheduled cleanup
 - no document values or uploaded content in application logs
@@ -49,7 +49,7 @@ flowchart LR
 
 ## Residual risks and deployment assumptions
 
-- The Community MVP is anonymous. UUIDs are high-entropy access handles, but
+- The Studio server is anonymous. UUIDs are high-entropy access handles, but
   they are not identity or authorization. Deploy it on a trusted network until
   authentication and ownership are added.
 - PDFBox parses complex untrusted input. Keep dependencies patched, constrain
@@ -67,10 +67,10 @@ flowchart LR
 
 ## Secrets
 
-No secrets are required by the Community code. Never commit `.env`, database
-passwords, private keys, entitlement signing keys, production endpoints, or
-customer documents. The future PRO license adapter belongs only in a private
-repository.
+No secrets are required by the Studio code. Never commit `.env`, database
+passwords, private keys, production endpoints, signing credentials, or customer
+documents. Public source licensing is enforced through legal terms, not a
+bundled secret or phone-home mechanism.
 
 ## Supported versions
 

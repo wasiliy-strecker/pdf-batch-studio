@@ -16,9 +16,9 @@ profile with `./scripts/dev.sh`, start the offline JavaFX app with
 6. For desktop UI changes, run the FXML smoke test and include a safe screenshot.
 
 Commits should use short imperative subjects, for example `Validate duplicate
-CSV headers`. Pull requests should explain the problem, approach, verification
-commands, security impact, and screenshots for visible UI changes.
+CSV headers`. Issues and reproducible bug reports are welcome.
 
-Do not submit code you do not have the right to license. Contributions require
-explicit acceptance by the project owner before they become part of a future
-commercially dual-licensed codebase.
+The project is not currently accepting outside code contributions or pull
+requests. This keeps copyright ownership clear for consistent source-available
+and commercial licensing. A contributor agreement and explicit acceptance
+process must be introduced before that policy changes.

@@ -47,7 +47,7 @@ creation mechanism. The adapter shields the core from JPA.
 
 Wires adapters, exposes REST/OpenAPI and the server-rendered UI, applies HTTP
 security headers and request limits, runs retention cleanup, and owns the
-single-thread bounded dispatcher.
+configurable bounded worker pool and queue.
 
 ### `pdf-batch-desktop`
 
@@ -111,12 +111,15 @@ per-launch operating-system temporary directory. After a terminal job, the ZIP
 is copied atomically where possible to the user-selected path, then job inputs,
 intermediate output, repository state, and the session directory are deleted.
 
-No network client is present in the desktop module. One job and one worker are
-allowed at a time, and the Community row limit remains 25.
+No network client is present in the desktop module. One local job and one worker
+are allowed at a time. The default 10,000-row safety cap can be changed with
+`PDF_BATCH_MAX_ROWS` or the `pdf.batch.maxRows` system property; it is a
+resource guard, not an edition boundary.
 
 ## Scaling seam
 
 `JobDispatchPort`, `JobRepository`, `DocumentEngine`, and `JobWorkspace` are
-explicit ports. A later worker process can consume job IDs and reuse the domain
-and document adapter. No message broker or distributed worker is part of this
-release.
+explicit ports. The server currently defaults to two workers, eight queued
+jobs, and ten active jobs, all configurable. A later worker process can consume
+job IDs and reuse the domain and document adapter. No message broker or
+distributed worker is part of this release.

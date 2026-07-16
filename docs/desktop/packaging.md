@@ -48,4 +48,4 @@ uploads them as workflow artifacts for tags matching `v*` or a manual run.
 
 Version 0.1 packages are unsigned. Code-signing certificates, Apple
 notarization credentials, and update infrastructure are deliberately absent;
-no signing secrets belong in the Community repository.
+no signing secrets belong in the public repository.

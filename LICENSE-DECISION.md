@@ -1,28 +1,28 @@
 # License decision: PolyForm Noncommercial 1.0.0
 
-The owner selected the PolyForm Noncommercial License 1.0.0 for PDF Batch
-Community.
+PDF Batch Studio is source-available under the unmodified PolyForm
+Noncommercial License 1.0.0. It is not presented as open-source software.
 
-## Why it fits
+## Product goals
 
-The complete source remains visible, inspectable, modifiable, and usable for
-the noncommercial purposes covered by PolyForm. Commercial use is not granted
-by the public license and requires a separate written agreement from the
-copyright owner.
+The public repository should be straightforward for individuals to study,
+build, test, and use for purposes allowed by PolyForm while preserving the
+owner's ability to require a commercial agreement for business use. The public
+build therefore contains the complete application and no runtime license gate.
 
-PolyForm Noncommercial is a source-available license, not an open-source
-license. This distinction must remain explicit in product documentation.
+## Supplemental documents
 
-## Commercial implications
+- `EVALUATION-GRANT.md` permits narrowly scoped internal technical and
+  recruitment evaluation by commercial organizations.
+- `COMMERCIAL-LICENSE.md` explains how to request commercial rights and grants
+  no rights by itself.
+- `NOTICE` contains the required copyright notice.
+- `THIRD_PARTY_NOTICES.md` identifies important bundled dependencies that remain
+  under their own licenses.
 
-- Permitted noncommercial use, modification, and distribution follow the
-  official PolyForm terms.
-- Commercial production use, hosted services, resale, and commercial product
-  integration require a separate written license.
-- Required notices and third-party licenses must remain with distributed
-  copies.
-- Copyright ownership must stay clear before accepting outside contributions
-  or offering dual commercial licensing.
+Outside code contributions are not accepted by default because unclear
+ownership can prevent consistent future commercial licensing.
 
-This document records an engineering decision, not legal advice. Obtain legal
-review before offering commercial licenses or relying on a supplemental grant.
+This is an engineering decision record, not legal advice. The supplemental
+evaluation grant and future commercial agreement should receive qualified legal
+review before commercial launch.

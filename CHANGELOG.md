@@ -9,6 +9,8 @@ Changelog, and releases will use semantic versioning.
 
 - Configurable 10,000-row safety default plus bounded server worker, queue, and
   active-job capacities without edition-based restrictions.
+- Unified Windows, macOS, Linux, server-JAR, Docker/GHCR, checksum, and
+  CycloneDX-SBOM release pipeline driven by one product version.
 - Fully offline JavaFX desktop application with field mapping, semantic PDF
   preview, progress, cancellation, ZIP export, native packaging scripts, and
   Windows/macOS package workflows.

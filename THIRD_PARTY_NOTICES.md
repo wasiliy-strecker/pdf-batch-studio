@@ -20,9 +20,10 @@ Important runtime and distribution components include:
 | Logback | EPL 1.0 or GNU LGPL 2.1 |
 | Maven Wrapper | Apache License 2.0 |
 
-Exact versions are pinned by the Maven build and recorded in the CycloneDX SBOM
-created for each release. Transitive dependencies and their declared license
-metadata must be reviewed from that SBOM before publishing a release.
+Exact versions are pinned by the Maven build and recorded in the aggregate
+CycloneDX JSON SBOM created by `scripts/package-server.sh`. Transitive
+dependencies and their declared license metadata must be reviewed from that
+SBOM before publishing a release.
 
 Project and license sources:
 

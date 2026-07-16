@@ -2,7 +2,7 @@
 
 PDF Batch Studio turns rows from a UTF-8 CSV file into personalized PDFs.
 It is available as a self-hosted Spring Boot web application and as a fully
-offline JavaFX desktop application for Windows and macOS. Both inspect an
+offline JavaFX desktop application for Windows, macOS, and Linux. Both inspect an
 interactive AcroForm template, map CSV columns to text fields, preview the first
 record, and create a ZIP archive.
 
@@ -25,6 +25,23 @@ is governed by the source-available license described below.
 - local H2 persistence for zero-setup testing
 - PostgreSQL, Docker Compose, Flyway, REST/OpenAPI, and a responsive web UI
 - native JavaFX desktop UI with no server, database, account, or network access
+
+## Release downloads
+
+One version produces separate, clearly named downloads from the same source:
+
+| Use | Release artifact |
+| --- | --- |
+| Windows desktop | `pdf-batch-studio-desktop-<version>-windows-x64.exe` |
+| Apple Silicon desktop | `pdf-batch-studio-desktop-<version>-macos-arm64.dmg` |
+| Intel macOS desktop | `pdf-batch-studio-desktop-<version>-macos-x64.dmg` |
+| Linux desktop | `pdf-batch-studio-desktop-<version>-linux-x64.tar.gz` |
+| Standalone server | `pdf-batch-studio-server-<version>.jar` |
+| Docker server | `pdf-batch-studio-server-<version>-docker.zip` |
+
+Tagged releases also publish a versioned GHCR image, SHA-256 checksums, and a
+CycloneDX SBOM. Until the first tag is published, use the local start commands
+below.
 
 ## Quick start: local web application
 
@@ -81,10 +98,23 @@ Create and smoke-test a local application image with:
 ./scripts/package-desktop.sh app-image
 ```
 
-Windows uses `scripts/package-desktop.ps1`. The `Desktop packages` GitHub
-Actions workflow creates a Windows x64 EXE plus macOS ARM64 and Intel DMGs on
-their respective operating systems. The first release packages are intentionally
-unsigned, so Windows SmartScreen or macOS Gatekeeper may show a warning.
+On Windows use `scripts/package-desktop.ps1`. Create the Linux archive with
+`./scripts/package-desktop.sh linux`. The unified `Release packages` workflow
+creates all target-specific downloads. The first release packages are
+intentionally unsigned, so Windows SmartScreen or macOS Gatekeeper may show a
+warning.
+
+### Server release bundle
+
+Build the executable JAR, Docker Compose bundle, and SBOM locally with:
+
+```bash
+./scripts/package-server.sh
+./scripts/smoke-server.sh target/release/pdf-batch-studio-server-*.jar
+```
+
+Generated release files stay below ignored `target/` directories. See
+[`docs/releases.md`](docs/releases.md) for the release contract.
 
 ## PostgreSQL with Docker Compose
 

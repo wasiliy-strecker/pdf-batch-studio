@@ -1,0 +1,202 @@
+name: Release packages
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify source
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Verify all modules
+        run: xvfb-run -a ./mvnw --batch-mode --no-transfer-progress verify
+      - name: Validate release tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          version=$(./mvnw --quiet -Dstyle.color=never -DforceStdout help:evaluate -Dexpression=studio.version | tail -n 1 | tr -d '\r')
+          if [[ "$GITHUB_REF_NAME" != "v$version" ]]; then
+            echo "Tag $GITHUB_REF_NAME does not match Studio version $version" >&2
+            exit 1
+          fi
+      - name: Build container image
+        run: docker build -f infrastructure/Dockerfile -t pdf-batch-studio:verify .
+
+  server:
+    name: Server JAR and Docker bundle
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Package server artifacts and SBOM
+        run: ./scripts/package-server.sh
+      - name: Smoke-test release JAR
+        run: ./scripts/smoke-server.sh target/release/pdf-batch-studio-server-*.jar
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-server
+          path: target/release/*
+          if-no-files-found: error
+
+  linux:
+    name: Linux x64 desktop
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Package and smoke-test Linux desktop
+        run: ./scripts/package-desktop.sh linux
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-desktop-linux-x64
+          path: desktop/pdf-batch-desktop/target/desktop-dist/*.tar.gz
+          if-no-files-found: error
+
+  windows:
+    name: Windows x64 desktop
+    needs: verify
+    runs-on: windows-2025
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Install WiX Toolset
+        shell: pwsh
+        run: |
+          choco install wixtoolset --no-progress -y
+          $wix = Get-ChildItem "${env:ProgramFiles(x86)}" -Directory -Filter "WiX Toolset v3*" |
+            Sort-Object Name -Descending |
+            Select-Object -First 1
+          if ($null -eq $wix) { throw "WiX Toolset installation was not found" }
+          Join-Path $wix.FullName "bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Package and smoke-test Windows desktop
+        shell: pwsh
+        run: ./scripts/package-desktop.ps1 -PackageType exe
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-desktop-windows-x64
+          path: desktop/pdf-batch-desktop/target/desktop-dist/*.exe
+          if-no-files-found: error
+
+  macos:
+    name: macOS ${{ matrix.architecture }} desktop
+    needs: verify
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            architecture: arm64
+          - runner: macos-15-intel
+            architecture: x64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Package and smoke-test macOS desktop
+        run: ./scripts/package-desktop.sh dmg
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-desktop-macos-${{ matrix.architecture }}
+          path: desktop/pdf-batch-desktop/target/desktop-dist/*.dmg
+          if-no-files-found: error
+
+  container:
+    name: Container image
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Resolve image version
+        id: version
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=manual-$GITHUB_RUN_ID" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Log in to GitHub Container Registry
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v4
+      - name: Build and optionally publish image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: infrastructure/Dockerfile
+          push: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
+            ghcr.io/${{ github.repository }}:latest
+          labels: |
+            org.opencontainers.image.title=PDF Batch Studio
+            org.opencontainers.image.version=${{ steps.version.outputs.value }}
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+
+  release:
+    name: Publish GitHub release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [server, linux, windows, macos, container]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: release-*
+          path: release-assets
+          merge-multiple: true
+      - name: Generate checksums
+        run: |
+          cd release-assets
+          find . -maxdepth 1 -type f ! -name SHA256SUMS -printf '%f\0' |
+            sort -z |
+            xargs -0 sha256sum > SHA256SUMS
+      - name: Publish release assets
+        uses: softprops/action-gh-release@v3
+        with:
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: release-assets/*

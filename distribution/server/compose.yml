@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:17.10-alpine
+    environment:
+      POSTGRES_DB: ${PDF_BATCH_DATABASE_NAME:-pdfbatch}
+      POSTGRES_USER: ${PDF_BATCH_DATABASE_USER:-pdfbatch}
+      POSTGRES_PASSWORD: ${PDF_BATCH_DATABASE_PASSWORD:?Set PDF_BATCH_DATABASE_PASSWORD in .env}
+    volumes:
+      - pdf-batch-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    image: ghcr.io/wasiliy-strecker/pdf-batch-studio:${PDF_BATCH_VERSION:?Set PDF_BATCH_VERSION in .env}
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      PDF_BATCH_DATABASE_URL: jdbc:postgresql://postgres:5432/${PDF_BATCH_DATABASE_NAME:-pdfbatch}
+      PDF_BATCH_DATABASE_USER: ${PDF_BATCH_DATABASE_USER:-pdfbatch}
+      PDF_BATCH_DATABASE_PASSWORD: ${PDF_BATCH_DATABASE_PASSWORD:?Set PDF_BATCH_DATABASE_PASSWORD in .env}
+      PDF_BATCH_STORAGE_ROOT: /var/lib/pdf-batch/jobs
+      PDF_BATCH_MAX_ROWS: ${PDF_BATCH_MAX_ROWS:-10000}
+      PDF_BATCH_WORKERS: ${PDF_BATCH_WORKERS:-2}
+      PDF_BATCH_QUEUE_CAPACITY: ${PDF_BATCH_QUEUE_CAPACITY:-8}
+      PDF_BATCH_MAX_ACTIVE_JOBS: ${PDF_BATCH_MAX_ACTIVE_JOBS:-10}
+    ports:
+      - "127.0.0.1:${PDF_BATCH_HTTP_PORT:-8080}:8080"
+    volumes:
+      - pdf-batch-files:/var/lib/pdf-batch/jobs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  pdf-batch-postgres:
+  pdf-batch-files:

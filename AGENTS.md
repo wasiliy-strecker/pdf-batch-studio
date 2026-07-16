@@ -32,6 +32,8 @@ Run from the repository root:
 ./scripts/dev.sh
 ./scripts/desktop-dev.sh
 ./scripts/package-desktop.sh app-image
+./scripts/package-desktop.sh linux
+./scripts/package-server.sh
 ./scripts/generate-sample.sh
 ```
 

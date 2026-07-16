@@ -325,7 +325,7 @@ public final class PdfCsvDocumentEngine implements DocumentEngine {
                 textField.setValue(entry.getValue());
                 textField.setReadOnly(true);
             }
-            document.getDocumentInformation().setCustomMetadataValue("GeneratedBy", "PDF Batch Community");
+            document.getDocumentInformation().setCustomMetadataValue("GeneratedBy", "PDF Batch Studio");
             document.save(output);
             return output.toByteArray();
         } catch (DocumentValidationException exception) {

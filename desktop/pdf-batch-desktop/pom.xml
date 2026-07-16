@@ -6,14 +6,14 @@
 
   <parent>
     <groupId>de.appfabrik.pdfbatch</groupId>
-    <artifactId>pdf-batch-community</artifactId>
+    <artifactId>pdf-batch-studio</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>pdf-batch-desktop</artifactId>
-  <name>PDF Batch Desktop</name>
-  <description>Offline JavaFX client for PDF Batch Community.</description>
+  <name>PDF Batch Studio Desktop</name>
+  <description>Offline JavaFX client for PDF Batch Studio.</description>
 
   <dependencies>
     <dependency>

@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = "Stop"
 $Root = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $Module = Join-Path $Root "desktop\pdf-batch-desktop"
-$AppName = "PDF Batch Desktop"
+$AppName = "PDF Batch Studio Desktop"
 $AppVersion = "0.1.0"
 $MainClass = "de.appfabrik.pdfbatch.desktop.DesktopLauncher"
 $MainJar = "pdf-batch-desktop-0.1.0-SNAPSHOT.jar"

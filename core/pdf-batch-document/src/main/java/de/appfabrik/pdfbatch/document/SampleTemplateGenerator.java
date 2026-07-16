@@ -45,14 +45,14 @@ public final class SampleTemplateGenerator {
 
             try (PDPageContentStream content = new PDPageContentStream(document, page)) {
                 write(content, bold, 22, 70, 770, "Customer welcome sheet");
-                write(content, font, 11, 70, 742, "Safe sample template for PDF Batch Community");
+                write(content, font, 11, 70, 742, "Safe sample template for PDF Batch Studio");
                 write(content, bold, 11, 70, 705, "Full name");
                 write(content, bold, 11, 70, 645, "Customer number");
             }
 
             addTextField(form, page, "fullName", 670);
             addTextField(form, page, "customerNumber", 610);
-            document.getDocumentInformation().setTitle("PDF Batch Community sample template");
+            document.getDocumentInformation().setTitle("PDF Batch Studio sample template");
             document.save(output);
             return output.toByteArray();
         }

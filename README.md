@@ -1,6 +1,6 @@
-# PDF Batch Community
+# PDF Batch Studio
 
-PDF Batch Community turns rows from a UTF-8 CSV file into personalized PDFs.
+PDF Batch Studio turns rows from a UTF-8 CSV file into personalized PDFs.
 It is available as a self-hosted Spring Boot web application and as a fully
 offline JavaFX desktop application for Windows and macOS. Both inspect an
 interactive AcroForm template, map CSV columns to text fields, preview the first
@@ -40,7 +40,7 @@ Run:
 
 Open <http://localhost:8080/>. The local profile uses an embedded file-based H2
 database and stores disposable job data below
-`backend/pdf-batch-app/.local-data/`. It is intended only for local testing.
+`server/pdf-batch-server/.local-data/`. It is intended only for local testing.
 
 Try the checked-in files:
 
@@ -70,7 +70,7 @@ copied into an isolated operating-system temporary directory and removed after
 export, cancellation, failure, or normal application shutdown. Only the ZIP
 location selected by the user persists.
 
-![PDF Batch Desktop](docs/screenshots/pdf-batch-desktop.png)
+![PDF Batch Studio Desktop](docs/screenshots/pdf-batch-desktop.png)
 
 ### Native packages
 
@@ -99,9 +99,9 @@ bound to `127.0.0.1:54329`. Stop it with:
 docker compose down
 ```
 
-![PDF Batch Community upload screen](docs/screenshots/community-upload.png)
+![PDF Batch Studio upload screen](docs/screenshots/studio-upload.png)
 
-![Completed Community batch job](docs/screenshots/community-completed-job.png)
+![Completed Community batch job](docs/screenshots/studio-completed-job.png)
 
 Use `docker compose down -v` only when you intentionally want to delete the
 local database and job volumes.
@@ -120,8 +120,8 @@ Useful individual commands:
 
 ```bash
 ./mvnw verify
-./mvnw -pl backend/pdf-batch-document -am test
-./mvnw -pl backend/pdf-batch-app -am test
+./mvnw -pl core/pdf-batch-document -am test
+./mvnw -pl server/pdf-batch-server -am test
 ./mvnw -pl desktop/pdf-batch-desktop -am test
 ./scripts/generate-sample.sh
 ```
@@ -144,12 +144,13 @@ The API is versioned below `/api/v1`. Its upload lifecycle is documented in
 ## Repository layout
 
 ```text
-pdf-batch-community/
-├── backend/
+pdf-batch-studio/
+├── core/
 │   ├── pdf-batch-core/          domain, use cases, and ports
-│   ├── pdf-batch-document/      PDFBox, CSV, ZIP, and local files
+│   └── pdf-batch-document/      PDFBox, CSV, ZIP, and local files
+├── server/
 │   ├── pdf-batch-persistence/   JPA, PostgreSQL, and Flyway
-│   └── pdf-batch-app/           Spring Boot, REST, Thymeleaf, and HTMX
+│   └── pdf-batch-server/        Spring Boot, REST, Thymeleaf, and HTMX
 ├── desktop/
 │   └── pdf-batch-desktop/       JavaFX offline application and adapters
 ├── docs/                        ADRs, API notes, and portfolio case study

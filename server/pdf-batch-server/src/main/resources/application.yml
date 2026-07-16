@@ -1,6 +1,6 @@
 spring:
   application:
-    name: pdf-batch-community
+    name: pdf-batch-studio
   profiles:
     default: local
   autoconfigure:

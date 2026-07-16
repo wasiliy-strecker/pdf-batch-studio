@@ -8,7 +8,7 @@ trees:
 
 ```text
 ~/dev/app_factory/
-├── pdf-batch-community/   public GitHub repository (this repository)
+├── pdf-batch-studio/   public GitHub repository (this repository)
 └── pdf-batch-pro/         future private GitLab repository
 ```
 
@@ -33,7 +33,7 @@ integration milestone, pinned to a tag or commit and never edited as a fork.
 
 ```mermaid
 flowchart LR
-    C[pdf-batch-community v0.1.0] -->|versioned dependency| P[pdf-batch-pro]
+    C[pdf-batch-studio v0.1.0] -->|versioned dependency| P[pdf-batch-pro]
     P --> PP[private features]
     P --> LA[private license adapter]
     P -. never required .-> C

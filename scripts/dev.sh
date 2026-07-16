@@ -8,5 +8,5 @@ if [ -z "${JAVA_HOME:-}" ] && [ -x "$HOME/.local/jdk-21/bin/java" ]; then
   export PATH
 fi
 
-./mvnw --quiet -pl backend/pdf-batch-app -am install -DskipTests
-exec ./mvnw -f backend/pdf-batch-app/pom.xml spring-boot:run
+./mvnw --quiet -pl server/pdf-batch-server -am install -DskipTests
+exec ./mvnw -f server/pdf-batch-server/pom.xml spring-boot:run

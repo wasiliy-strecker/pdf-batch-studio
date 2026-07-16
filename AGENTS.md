@@ -2,7 +2,7 @@
 
 ## Scope
 
-This repository contains only PDF Batch Community. It must remain independently
+This repository contains only PDF Batch Studio. It must remain independently
 cloneable, buildable, testable, and useful without access to a private PRO
 repository or AppFabrik production infrastructure.
 
@@ -15,7 +15,7 @@ endpoints, or private PRO implementations. Safe generated fixtures belong in
 - `pdf-batch-core`: framework-free domain, application services, and ports.
 - `pdf-batch-document`: PDFBox, Commons CSV, ZIP, and filesystem adapters.
 - `pdf-batch-persistence`: JPA entities, repositories, and Flyway migrations.
-- `pdf-batch-app`: Spring Boot wiring, REST API, web UI, and configuration.
+- `pdf-batch-server`: Spring Boot wiring, REST API, web UI, and configuration.
 - `pdf-batch-desktop`: JavaFX UI and offline desktop-only adapters.
 
 Dependencies point inward. Core must not import Spring, JPA, PDFBox, or web

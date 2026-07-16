@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 MODULE="$ROOT/desktop/pdf-batch-desktop"
-APP_NAME="PDF Batch Desktop"
+APP_NAME="PDF Batch Studio Desktop"
 APP_VERSION="0.1.0"
 MAIN_CLASS="de.appfabrik.pdfbatch.desktop.DesktopLauncher"
 MAIN_JAR="pdf-batch-desktop-0.1.0-SNAPSHOT.jar"

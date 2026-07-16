@@ -1,4 +1,4 @@
-# Portfolio case study: PDF Batch Community
+# Portfolio case study: PDF Batch Studio
 
 ## Problem
 
@@ -8,7 +8,7 @@ copy/paste is slow and difficult to audit.
 
 ## Product outcome
 
-PDF Batch Community implements the whole local workflow twice over one shared
+PDF Batch Studio implements the whole local workflow twice over one shared
 core: as a self-hosted Spring Boot application and as a native offline JavaFX
 application. Both inspect an AcroForm and CSV, map fields, preview real output,
 run a bounded asynchronous batch, and create a deterministic archive with

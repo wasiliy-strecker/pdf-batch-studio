@@ -26,7 +26,7 @@
                 <VBox spacing="2.0">
                     <children>
                         <Label styleClass="eyebrow" text="APPFABRIK COMMUNITY" />
-                        <Label styleClass="app-title" text="PDF Batch Desktop" />
+                        <Label styleClass="app-title" text="PDF Batch Studio Desktop" />
                     </children>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS" />

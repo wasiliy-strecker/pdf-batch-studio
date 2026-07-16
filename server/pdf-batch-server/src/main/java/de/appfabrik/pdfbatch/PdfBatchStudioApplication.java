@@ -9,8 +9,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableConfigurationProperties(PdfBatchProperties.class)
 @SpringBootApplication
-public class PdfBatchApplication {
+public class PdfBatchStudioApplication {
     public static void main(String[] args) {
-        SpringApplication.run(PdfBatchApplication.class, args);
+        SpringApplication.run(PdfBatchStudioApplication.class, args);
     }
 }

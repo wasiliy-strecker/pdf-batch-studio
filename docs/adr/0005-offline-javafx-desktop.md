@@ -6,7 +6,7 @@ Accepted.
 
 ## Decision
 
-PDF Batch Community includes a JavaFX 21 desktop module in the same public
+PDF Batch Studio includes a JavaFX 21 desktop module in the same public
 repository. It reuses the framework-free core and document modules directly and
 provides desktop-specific in-memory repository, bounded dispatcher, temporary
 workspace, preview renderer, and FXML/CSS UI adapters.

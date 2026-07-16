@@ -1,6 +1,6 @@
 # Architecture
 
-PDF Batch Community is a Java 21 modular monolith with two delivery adapters: a
+PDF Batch Studio is a Java 21 modular monolith with two delivery adapters: a
 Spring Boot web application and an offline JavaFX desktop application. Its
 module boundaries keep document processing and use cases independent of both UI
 frameworks so a separate worker can be introduced later without rewriting the
@@ -43,7 +43,7 @@ isolated local workspace.
 Maps the domain aggregate to normalized JPA tables. Flyway is the only schema
 creation mechanism. The adapter shields the core from JPA.
 
-### `pdf-batch-app`
+### `pdf-batch-server`
 
 Wires adapters, exposes REST/OpenAPI and the server-rendered UI, applies HTTP
 security headers and request limits, runs retention cleanup, and owns the

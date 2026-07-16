@@ -12,13 +12,13 @@
   </parent>
 
   <groupId>de.appfabrik.pdfbatch</groupId>
-  <artifactId>pdf-batch-community</artifactId>
+  <artifactId>pdf-batch-studio</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>PDF Batch Community</name>
+  <name>PDF Batch Studio</name>
   <description>Self-hosted PDF batch generation from AcroForm templates and CSV data.</description>
-  <url>https://github.com/appfabrik/pdf-batch-community</url>
+  <url>https://github.com/wasiliy-strecker/pdf-batch-studio</url>
 
   <licenses>
     <license>
@@ -29,10 +29,10 @@
   </licenses>
 
   <modules>
-    <module>backend/pdf-batch-core</module>
-    <module>backend/pdf-batch-document</module>
-    <module>backend/pdf-batch-persistence</module>
-    <module>backend/pdf-batch-app</module>
+    <module>core/pdf-batch-core</module>
+    <module>core/pdf-batch-document</module>
+    <module>server/pdf-batch-persistence</module>
+    <module>server/pdf-batch-server</module>
     <module>desktop/pdf-batch-desktop</module>
   </modules>
 

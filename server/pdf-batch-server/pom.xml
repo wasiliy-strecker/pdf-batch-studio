@@ -5,12 +5,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>de.appfabrik.pdfbatch</groupId>
-    <artifactId>pdf-batch-community</artifactId>
+    <artifactId>pdf-batch-studio</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
-  <artifactId>pdf-batch-app</artifactId>
-  <name>PDF Batch Community Application</name>
+  <artifactId>pdf-batch-server</artifactId>
+  <name>PDF Batch Studio Server</name>
 
   <dependencies>
     <dependency>
@@ -94,7 +94,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>de.appfabrik.pdfbatch.PdfBatchApplication</mainClass>
+          <mainClass>de.appfabrik.pdfbatch.PdfBatchStudioApplication</mainClass>
         </configuration>
       </plugin>
     </plugins>

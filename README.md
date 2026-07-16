@@ -17,9 +17,9 @@ license check, watermark, payment integration, or private dependency.
 - filename patterns such as `{customerId}-{name}.pdf`
 - first-row PDF preview
 - asynchronous jobs with polling, progress, cancellation, and partial success
-- up to 25 data rows per Community job
+- configurable processing safety limits with a 10,000-row default
 - ZIP results with `documents/*.pdf`, `manifest.json`, and `errors.csv`
-- one active job per application instance and one bounded worker
+- bounded, configurable server workers, queue capacity, and active-job capacity
 - automatic one-hour retention and idempotent cleanup
 - local H2 persistence for zero-setup testing
 - PostgreSQL, Docker Compose, Flyway, REST/OpenAPI, and a responsive web UI
@@ -169,7 +169,8 @@ future private PRO product will also be a separate repository; see
 
 - AcroForm text fields only; checkboxes, signatures, image overlays, and flat
   PDFs are not supported.
-- 25 data rows, one active job, one local worker, and local filesystem output.
+- Resource limits remain configurable safeguards; desktop processing uses one
+  local worker and server processing defaults to two workers and a bounded queue.
 - Polling is used instead of server-sent events.
 - Anonymous access assumes a trusted local/self-hosted environment. Random job
   UUIDs act as unguessable handles, not as user authentication.

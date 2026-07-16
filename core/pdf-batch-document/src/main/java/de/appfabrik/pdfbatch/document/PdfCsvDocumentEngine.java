@@ -211,8 +211,10 @@ public final class PdfCsvDocumentEngine implements DocumentEngine {
                     rowCount++;
                     if (rowCount > limits.maxRows()) {
                         throw new DocumentValidationException(
-                                "COMMUNITY_ROW_LIMIT_EXCEEDED",
-                                "Community edition accepts at most " + limits.maxRows() + " data rows");
+                                "ROW_LIMIT_EXCEEDED",
+                                "The configured safety limit accepts at most "
+                                        + limits.maxRows()
+                                        + " data rows");
                     }
                 }
                 if (rowCount == 0) {

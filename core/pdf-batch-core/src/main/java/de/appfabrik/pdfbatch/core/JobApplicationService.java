@@ -15,6 +15,7 @@ public final class JobApplicationService {
     private final DocumentLimits limits;
     private final Clock clock;
     private final Duration retention;
+    private final int maxActiveJobs;
 
     public JobApplicationService(
             JobRepository repository,
@@ -23,7 +24,11 @@ public final class JobApplicationService {
             JobDispatchPort dispatcher,
             DocumentLimits limits,
             Clock clock,
-            Duration retention) {
+            Duration retention,
+            int maxActiveJobs) {
+        if (maxActiveJobs < 1) {
+            throw new IllegalArgumentException("Maximum active jobs must be positive");
+        }
         this.repository = repository;
         this.workspace = workspace;
         this.documentEngine = documentEngine;
@@ -31,6 +36,7 @@ public final class JobApplicationService {
         this.limits = limits;
         this.clock = clock;
         this.retention = retention;
+        this.maxActiveJobs = maxActiveJobs;
     }
 
     public BatchJob create(InputStream template, InputStream csv) {
@@ -85,8 +91,8 @@ public final class JobApplicationService {
         if (job.status() != JobStatus.READY) {
             throw new InvalidJobStateException(job.status(), "start processing");
         }
-        if (repository.countActiveJobs() > 0) {
-            throw new JobCapacityException();
+        if (repository.countActiveJobs() >= maxActiveJobs) {
+            throw new JobCapacityException(maxActiveJobs);
         }
         job.queue(clock.instant());
         BatchJob queued = repository.save(job);

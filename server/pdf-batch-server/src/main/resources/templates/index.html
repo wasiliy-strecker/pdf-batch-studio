@@ -21,7 +21,8 @@
         <h1>Turn CSV rows into ready-to-send PDFs.</h1>
         <p class="lead">
           Upload an AcroForm PDF and a UTF-8 CSV, map their fields, preview the
-          first row, and generate up to 25 personalized documents locally.
+          first row, and generate personalized documents within configurable
+          resource-safety limits.
         </p>
       </section>
 
@@ -40,7 +41,7 @@
           <label>
             <span>CSV data</span>
             <input type="file" name="data" accept="text/csv,.csv,.tsv" required>
-            <small>UTF-8 with comma, semicolon, or tab delimiter; maximum 25 rows.</small>
+            <small>UTF-8 with comma, semicolon, or tab delimiter; streamed with bounded processing.</small>
           </label>
           <button class="primary" type="submit">Inspect files</button>
         </form>

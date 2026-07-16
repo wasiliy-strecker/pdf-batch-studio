@@ -24,9 +24,6 @@ import java.util.List;
 import java.util.UUID;
 
 public final class DesktopWorkflowService implements DesktopWorkflow {
-    public static final DocumentLimits COMMUNITY_LIMITS =
-            new DocumentLimits(20_000_000, 5_000_000, 25, 100, 500, 2_000);
-
     private final Path workspaceRoot;
     private final JobApplicationService jobs;
     private final DesktopJobDispatcher dispatcher;
@@ -34,21 +31,25 @@ public final class DesktopWorkflowService implements DesktopWorkflow {
     private boolean closed;
 
     public static DesktopWorkflowService create(Path workspaceRoot) {
+        return create(workspaceRoot, DesktopRuntimeSettings.fromEnvironment().documentLimits());
+    }
+
+    static DesktopWorkflowService create(Path workspaceRoot, DocumentLimits limits) {
         InMemoryJobRepository repository = new InMemoryJobRepository();
         LocalJobWorkspace workspace = new LocalJobWorkspace(workspaceRoot);
         DocumentEngine documentEngine = new PdfCsvDocumentEngine();
         Clock clock = Clock.systemUTC();
-        JobWorker worker = new JobWorker(
-                repository, workspace, documentEngine, COMMUNITY_LIMITS, clock);
+        JobWorker worker = new JobWorker(repository, workspace, documentEngine, limits, clock);
         DesktopJobDispatcher dispatcher = new DesktopJobDispatcher(worker);
         JobApplicationService jobs = new JobApplicationService(
                 repository,
                 workspace,
                 documentEngine,
                 dispatcher,
-                COMMUNITY_LIMITS,
+                limits,
                 clock,
-                Duration.ofHours(1));
+                Duration.ofHours(1),
+                1);
         return new DesktopWorkflowService(workspaceRoot, jobs, dispatcher);
     }
 

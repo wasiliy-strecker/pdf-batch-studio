@@ -1,6 +1,7 @@
 package de.appfabrik.pdfbatch.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -61,8 +62,35 @@ class JobLifecycleServiceTest {
         assertThat(workspace.deletedJobs).containsExactly(job.id());
     }
 
+    @Test
+    void acceptsJobsUpToTheConfiguredActiveCapacity() {
+        FakeRepository repository = new FakeRepository();
+        FakeWorkspace workspace = new FakeWorkspace();
+        BatchJob first = readyJob();
+        BatchJob second = readyJob();
+        BatchJob rejected = readyJob();
+        repository.save(first);
+        repository.save(second);
+        repository.save(rejected);
+        JobApplicationService service = service(repository, workspace, 2);
+
+        service.start(first.id());
+        service.start(second.id());
+
+        assertThatThrownBy(() -> service.start(rejected.id()))
+                .isInstanceOfSatisfying(
+                        JobCapacityException.class,
+                        exception -> assertThat(exception.code())
+                                .isEqualTo("JOB_CAPACITY_REACHED"));
+    }
+
     private static JobApplicationService service(
             FakeRepository repository, FakeWorkspace workspace) {
+        return service(repository, workspace, 1);
+    }
+
+    private static JobApplicationService service(
+            FakeRepository repository, FakeWorkspace workspace, int maxActiveJobs) {
         return new JobApplicationService(
                 repository,
                 workspace,
@@ -70,7 +98,14 @@ class JobLifecycleServiceTest {
                 id -> {},
                 limits(),
                 Clock.fixed(NOW, ZoneOffset.UTC),
-                Duration.ofHours(1));
+                Duration.ofHours(1),
+                maxActiveJobs);
+    }
+
+    private static BatchJob readyJob() {
+        BatchJob job = BatchJob.draft(UUID.randomUUID(), inspection(), NOW, NOW.plusSeconds(3600));
+        job.configure(configuration(), NOW);
+        return job;
     }
 
     private static DocumentLimits limits() {

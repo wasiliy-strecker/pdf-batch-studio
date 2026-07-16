@@ -37,7 +37,7 @@ public final class DesktopJobDispatcher implements JobDispatchPort, AutoCloseabl
         try {
             executor.execute(() -> worker.process(jobId));
         } catch (RejectedExecutionException exception) {
-            throw new JobCapacityException();
+            throw new JobCapacityException(1);
         }
     }
 

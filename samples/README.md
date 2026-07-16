@@ -19,7 +19,8 @@ Use `{customerId}-{name}.pdf` as the output filename pattern.
 | `customers-tab.tsv` | Tab | 5 | Tab detection |
 | `customers-special-characters.csv` | Comma | 6 | UTF-8, punctuation, and a quoted comma |
 | `customers-duplicate-output.csv` | Comma | 3 | Duplicate output filename handling |
-| `customers-25-rows.csv` | Comma | 25 | Maximum Community row count |
+| `customers-25-rows.csv` | Comma | 25 | Medium-size regression sample |
+| `customers-26-rows.csv` | Comma | 26 | Confirms the former edition limit is gone |
 
 For `customers-duplicate-output.csv`, the ZIP should contain three PDFs with
 unique names even though all filename values are identical.
@@ -28,7 +29,6 @@ unique names even though all filename values are identical.
 
 | File | Expected validation code | Purpose |
 | --- | --- | --- |
-| `invalid-26-rows.csv` | `COMMUNITY_ROW_LIMIT_EXCEEDED` | One row above the Community limit |
 | `invalid-duplicate-header.csv` | `DUPLICATE_CSV_HEADER` | Duplicate column name |
 | `invalid-empty-header.csv` | `EMPTY_CSV_HEADER` | Missing column name |
 | `invalid-inconsistent-row.csv` | `INCONSISTENT_CSV_ROW` | Data row has too many values |

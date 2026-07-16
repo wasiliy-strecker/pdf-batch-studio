@@ -53,8 +53,10 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    JobDispatchPort jobDispatcher(JobWorker worker) {
-        return new BoundedJobDispatcher(worker);
+    JobDispatchPort jobDispatcher(JobWorker worker, PdfBatchProperties properties) {
+        PdfBatchProperties.Processing processing = properties.processing();
+        return new BoundedJobDispatcher(
+                worker, processing.workers(), processing.queueCapacity());
     }
 
     @Bean
@@ -73,6 +75,7 @@ public class ApplicationConfiguration {
                 dispatcher,
                 limits,
                 clock,
-                properties.retention());
+                properties.retention(),
+                properties.processing().maxActiveJobs());
     }
 }

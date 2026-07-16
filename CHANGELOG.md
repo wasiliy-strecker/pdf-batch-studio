@@ -7,6 +7,8 @@ Changelog, and releases will use semantic versioning.
 
 ### Added
 
+- Configurable 10,000-row safety default plus bounded server worker, queue, and
+  active-job capacities without edition-based restrictions.
 - Fully offline JavaFX desktop application with field mapping, semantic PDF
   preview, progress, cancellation, ZIP export, native packaging scripts, and
   Windows/macOS package workflows.

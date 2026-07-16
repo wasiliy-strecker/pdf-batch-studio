@@ -16,9 +16,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class BoundedJobDispatcher implements JobDispatchPort {
     private final ThreadPoolExecutor executor;
     private final JobWorker worker;
+    private final int capacity;
 
-    public BoundedJobDispatcher(JobWorker worker) {
+    public BoundedJobDispatcher(JobWorker worker, int workers, int queueCapacity) {
+        if (workers < 1 || queueCapacity < 1) {
+            throw new IllegalArgumentException("Worker and queue capacity must be positive");
+        }
         this.worker = worker;
+        capacity = workers + queueCapacity;
         ThreadFactory threadFactory = new ThreadFactory() {
             private final AtomicInteger sequence = new AtomicInteger();
 
@@ -31,11 +36,11 @@ public final class BoundedJobDispatcher implements JobDispatchPort {
             }
         };
         executor = new ThreadPoolExecutor(
-                1,
-                1,
+                workers,
+                workers,
                 0,
                 TimeUnit.MILLISECONDS,
-                new ArrayBlockingQueue<>(1),
+                new ArrayBlockingQueue<>(queueCapacity),
                 threadFactory,
                 new ThreadPoolExecutor.AbortPolicy());
     }
@@ -45,7 +50,7 @@ public final class BoundedJobDispatcher implements JobDispatchPort {
         try {
             executor.execute(() -> worker.process(jobId));
         } catch (RejectedExecutionException exception) {
-            throw new JobCapacityException();
+            throw new JobCapacityException(capacity);
         }
     }
 

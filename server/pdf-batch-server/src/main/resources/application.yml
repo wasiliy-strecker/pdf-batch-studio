@@ -48,10 +48,14 @@ pdf-batch:
   limits:
     max-pdf-bytes: 20971520
     max-csv-bytes: 5242880
-    max-rows: 25
+    max-rows: ${PDF_BATCH_MAX_ROWS:10000}
     max-pdf-pages: 100
     max-pdf-fields: 200
     max-field-value-length: 1000
+  processing:
+    workers: ${PDF_BATCH_WORKERS:2}
+    queue-capacity: ${PDF_BATCH_QUEUE_CAPACITY:8}
+    max-active-jobs: ${PDF_BATCH_MAX_ACTIVE_JOBS:10}
 
 logging:
   level:

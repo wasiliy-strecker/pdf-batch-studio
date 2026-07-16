@@ -3,6 +3,7 @@ package de.appfabrik.pdfbatch.desktop.workflow;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import de.appfabrik.pdfbatch.core.DocumentLimits;
 import de.appfabrik.pdfbatch.core.DocumentValidationException;
 import de.appfabrik.pdfbatch.core.FieldMapping;
 import de.appfabrik.pdfbatch.core.JobStatus;
@@ -86,7 +87,7 @@ class DesktopWorkflowServiceTest {
     }
 
     @Test
-    void enforcesTheCommunityRowLimitBeforeCreatingAJob() throws Exception {
+    void acceptsMoreThanTheFormerEditionLimitByDefault() throws Exception {
         Path pdf = temporaryDirectory.resolve("template.pdf");
         Path csv = temporaryDirectory.resolve("too-many.csv");
         Files.write(pdf, SampleTemplateGenerator.createTemplate());
@@ -96,13 +97,30 @@ class DesktopWorkflowServiceTest {
         }
         Files.writeString(csv, contents, StandardCharsets.UTF_8);
 
-        try (DesktopWorkflowService service =
-                DesktopWorkflowService.create(temporaryDirectory.resolve("limited-workspace"))) {
+        try (DesktopWorkflowService service = DesktopWorkflowService.create(
+                temporaryDirectory.resolve("default-workspace"))) {
+            assertThat(service.inspect(pdf, csv).totalRows()).isEqualTo(26);
+        }
+    }
+
+    @Test
+    void enforcesAConfiguredRowSafetyLimit() throws Exception {
+        Path pdf = temporaryDirectory.resolve("limited-template.pdf");
+        Path csv = temporaryDirectory.resolve("limited.csv");
+        Files.write(pdf, SampleTemplateGenerator.createTemplate());
+        Files.writeString(
+                csv,
+                "name,customerId\nAda,1\nGrace,2\nKatherine,3\n",
+                StandardCharsets.UTF_8);
+        DocumentLimits limits = new DocumentLimits(20_000_000, 5_000_000, 2, 100, 500, 2_000);
+
+        try (DesktopWorkflowService service = DesktopWorkflowService.create(
+                temporaryDirectory.resolve("limited-workspace"), limits)) {
             assertThatThrownBy(() -> service.inspect(pdf, csv))
                     .isInstanceOfSatisfying(
                             DocumentValidationException.class,
                             exception -> assertThat(exception.code())
-                                    .isEqualTo("COMMUNITY_ROW_LIMIT_EXCEEDED"));
+                                    .isEqualTo("ROW_LIMIT_EXCEEDED"));
         }
     }
 

@@ -48,13 +48,13 @@ class PdfCsvDocumentEngineTest {
     }
 
     @Test
-    void enforcesTheCommunityRowLimitBeforeProcessing() throws IOException {
+    void enforcesTheConfiguredRowSafetyLimitBeforeProcessing() throws IOException {
         StringBuilder csv = new StringBuilder("name,id\n");
         for (int row = 0; row < 26; row++) {
             csv.append("Person ").append(row).append(',').append(row).append('\n');
         }
 
-        assertCsvError(csv.toString(), "COMMUNITY_ROW_LIMIT_EXCEEDED");
+        assertCsvError(csv.toString(), "ROW_LIMIT_EXCEEDED");
     }
 
     @Test

@@ -7,6 +7,11 @@ Maven artifacts may retain a `-SNAPSHOT` suffix during development, while native
 packages, server downloads, container tags, and the desktop `--version` output
 use the public Studio version.
 
+`native.package.version` is a separate monotonically increasing installer
+metadata value because `jpackage` rejects a leading-zero version on macOS. It
+does not appear in release filenames or the desktop `--version` output. Never
+decrease it between native package releases.
+
 ## Local packaging
 
 ```bash

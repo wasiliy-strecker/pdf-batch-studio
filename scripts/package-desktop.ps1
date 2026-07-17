@@ -17,16 +17,22 @@ if (-not (Test-Path $JPackage)) {
     throw "jpackage was not found below JAVA_HOME."
 }
 
-function Get-MavenValue([string]$Expression) {
-    $Output = & "$Root\mvnw.cmd" --quiet -Dstyle.color=never -DforceStdout `
-        help:evaluate "-Dexpression=$Expression"
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    return ($Output | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Last 1).Trim()
+function Get-PomValue([string]$XPath) {
+    $Node = $Pom.SelectSingleNode($XPath, $Namespace)
+    if ($null -eq $Node -or [string]::IsNullOrWhiteSpace($Node.InnerText)) {
+        throw "Required Maven value is missing at $XPath"
+    }
+    return $Node.InnerText.Trim()
 }
 
-$MavenVersion = Get-MavenValue "project.version"
-$AppVersion = Get-MavenValue "studio.version"
+$Pom = [xml](Get-Content (Join-Path $Root "pom.xml") -Raw)
+$Namespace = [System.Xml.XmlNamespaceManager]::new($Pom.NameTable)
+$Namespace.AddNamespace("m", "http://maven.apache.org/POM/4.0.0")
+$MavenVersion = Get-PomValue "/m:project/m:version"
+$AppVersion = Get-PomValue "/m:project/m:properties/m:studio.version"
+$PackageVersion = Get-PomValue "/m:project/m:properties/m:native.package.version"
 $MainJar = "pdf-batch-desktop-$MavenVersion.jar"
+Write-Host "Packaging Studio $AppVersion with native package version $PackageVersion"
 
 & "$Root\mvnw.cmd" --batch-mode --no-transfer-progress `
     -pl desktop/pdf-batch-desktop -am install -DskipTests
@@ -52,7 +58,7 @@ Copy-Item (Join-Path $Module "target\$MainJar") (Join-Path $InputDirectory $Main
 
 $Common = @(
     "--name", $AppName,
-    "--app-version", $AppVersion,
+    "--app-version", $PackageVersion,
     "--vendor", "Wasiliy Strecker",
     "--description", "Offline PDF batch generation from AcroForm templates and CSV data",
     "--copyright", "Copyright 2026 Wasiliy Strecker",

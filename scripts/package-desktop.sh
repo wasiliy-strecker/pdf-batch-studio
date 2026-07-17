@@ -39,6 +39,7 @@ maven_value() {
 
 MAVEN_VERSION=$(maven_value project.version)
 APP_VERSION=$(maven_value studio.version)
+PACKAGE_VERSION=$(maven_value native.package.version)
 MAIN_JAR="pdf-batch-desktop-$MAVEN_VERSION.jar"
 
 "$ROOT/mvnw" --batch-mode --no-transfer-progress \
@@ -60,7 +61,7 @@ cp "$ROOT/LICENSE" "$ROOT/NOTICE" "$ROOT/EVALUATION-GRANT.md" \
 
 common=(
   --name "$APP_NAME"
-  --app-version "$APP_VERSION"
+  --app-version "$PACKAGE_VERSION"
   --vendor "Wasiliy Strecker"
   --description "Offline PDF batch generation from AcroForm templates and CSV data"
   --copyright "Copyright 2026 Wasiliy Strecker"

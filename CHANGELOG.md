@@ -11,6 +11,8 @@ Changelog, and releases will use semantic versioning.
   active-job capacities without edition-based restrictions.
 - Unified Windows, macOS, Linux, server-JAR, Docker/GHCR, checksum, and
   CycloneDX-SBOM release pipeline driven by one product version.
+- Cross-platform native installer metadata compatible with macOS `jpackage`
+  plus deterministic POM version loading in the Windows packaging script.
 - Fully offline JavaFX desktop application with field mapping, semantic PDF
   preview, progress, cancellation, ZIP export, native packaging scripts, and
   Windows/macOS package workflows.

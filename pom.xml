@@ -43,6 +43,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <studio.version>0.1.0</studio.version>
+    <native.package.version>1.0.0</native.package.version>
     <cyclonedx-maven-plugin.version>2.9.2</cyclonedx-maven-plugin.version>
     <pdfbox.version>3.0.8</pdfbox.version>
     <commons-csv.version>1.14.1</commons-csv.version>

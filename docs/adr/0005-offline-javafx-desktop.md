@@ -8,15 +8,16 @@ Accepted.
 
 PDF Batch Studio includes a JavaFX 21 desktop module in the same public
 repository. It reuses the framework-free core and document modules directly and
-provides desktop-specific in-memory repository, bounded dispatcher, temporary
-workspace, preview renderer, and FXML/CSS UI adapters.
+provides desktop-specific in-memory job storage, bounded dispatch, a managed
+workspace, preview rendering, and FXML/CSS UI adapters. SQLite through JDBC and
+Flyway stores saved projects, settings and history.
 
 The desktop application is fully offline. It does not embed or start Spring
-Boot, does not call the REST API, and does not use a database. Document
-validation remains identical across the web and desktop adapters; resource
-limits are configuration rather than product editions.
+Boot and does not call the REST API. Desktop 1.0 opts into additional form field
+types and password handling in the shared engine. The default server contract
+remains compatible. Resource limits are configuration rather than product editions.
 
-Native packages are built with the JDK `jpackage` tool on Windows and macOS.
+Native packages are built with the JDK `jpackage` tool on Windows, macOS and Linux.
 
 ## Consequences
 

@@ -9,7 +9,7 @@ domain.
 ```mermaid
 flowchart LR
     Browser[Thymeleaf + HTMX UI] --> API[Spring MVC /api/v1]
-    Desktop[JavaFX desktop UI] --> DesktopAdapter[In-memory repository + local dispatcher]
+    Desktop[JavaFX desktop UI] --> DesktopAdapter[Desktop services + local dispatcher]
     API --> App[Application services]
     DesktopAdapter --> App
     App --> Domain[Domain model]
@@ -22,7 +22,8 @@ flowchart LR
     StorePort --> Files[(isolated job directories)]
     App --> Queue[bounded in-process worker]
     Queue --> PDF
-    DesktopAdapter --> Temp[(session temp workspace)]
+    DesktopAdapter --> Temp[(managed session workspace)]
+    DesktopAdapter --> LocalDB[(SQLite through JDBC + Flyway)]
 ```
 
 ## Module responsibilities
@@ -34,7 +35,7 @@ worker orchestration, and ports. It has no framework dependencies.
 
 ### `pdf-batch-document`
 
-Inspects and fills AcroForm text fields, validates and streams CSV records,
+Inspects and fills AcroForms, validates and streams CSV records,
 generates safe collision-free filenames, writes ZIP entries, and implements the
 isolated local workspace.
 
@@ -51,10 +52,18 @@ configurable bounded worker pool and queue.
 
 ### `pdf-batch-desktop`
 
-Owns the JavaFX/FXML/CSS interface, desktop ViewModel, defensive in-memory job
-repository, single-thread dispatcher, PDF-to-PNG preview rendering, temporary
-session workspace, and result export. It depends only on `pdf-batch-core` and
-`pdf-batch-document`; it does not depend on Spring, JPA, H2, or PostgreSQL.
+Uses a conventional Controller → Service → Repository structure within the
+existing module. MainController owns interaction and localization, the
+ViewModel and workflow service own the active batch, StudioRepository owns
+SQLite access and Flyway migrations. TableImportService normalizes XLSX to the
+existing bounded CSV pipeline. ProjectArchive handles the versioned exchange
+format. DemoService generates the bundled examples locally.
+
+SQLite tables are templates, projects, field_mappings, batch_runs, batch_errors
+and app_settings. PDFs remain files. Project updates are transactional and use
+content-addressed template copies. An application lock prevents concurrent
+migration and workspace cleanup by two instances. Active jobs remain in the
+existing in-memory repository, while durable history records start and finish.
 
 ## Workflow
 
@@ -92,7 +101,7 @@ DRAFT -> READY -> QUEUED -> PROCESSING -> PACKAGING
 ```
 
 Active jobs can move through `CANCELLING` to `CANCELLED`. Unexpected processing
-errors move non-terminal jobs to `FAILED`; retention removes non-active expired
+errors move non-terminal jobs to `FAILED`. Retention removes non-active expired
 jobs and their files. Transitions and monotonic counters are tested in core.
 
 ## Local and PostgreSQL profiles
@@ -106,15 +115,20 @@ H2 is deliberately not presented as the future hosted deployment database.
 
 The desktop composition uses the same `JobApplicationService`, `JobWorker`,
 `DocumentEngine`, state transitions, limits, and collision-safe ZIP generation
-as the web application. Selected files are copied into a UUID job below a
-per-launch operating-system temporary directory. After a terminal job, the ZIP
-is copied atomically where possible to the user-selected path, then job inputs,
-intermediate output, repository state, and the session directory are deleted.
+as the web application. Selected files are copied into UUID job directories in
+a managed workspace under the local application directory. Successful exports
+are staged beside the destination and moved without replacement. Failed exports
+retain the intermediate result for retry. Cancellation removes the active job's
+files. The next startup marks unfinished history rows as INTERRUPTED and removes
+only the application's stale workspace while holding its exclusive lock.
 
-No network client is present in the desktop module. One local job and one worker
-are allowed at a time. The default 10,000-row safety cap can be changed with
-`PDF_BATCH_MAX_ROWS` or the `pdf.batch.maxRows` system property; it is a
-resource guard, not an edition boundary.
+No network client is present. One batch worker runs at a time. Preview and
+preflight use a separate UI worker. Page selection changes rendering only.
+Desktop credentials live in the document-engine instance for the session, never
+in JobConfiguration, projects, history or the server API. Protected input stays
+encrypted at rest, preview output is decrypted in memory, final PDFs may use a
+separate AES-256 password. The default engine retains the server's existing
+text-field and unencrypted-input contract.
 
 ## Scaling seam
 

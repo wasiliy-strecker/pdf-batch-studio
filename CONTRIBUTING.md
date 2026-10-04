@@ -19,6 +19,6 @@ Commits should use short imperative subjects, for example `Validate duplicate
 CSV headers`. Issues and reproducible bug reports are welcome.
 
 The project is not currently accepting outside code contributions or pull
-requests. This keeps copyright ownership clear for consistent source-available
-and commercial licensing. A contributor agreement and explicit acceptance
-process must be introduced before that policy changes.
+requests. The code is available under Apache License 2.0. A contributor
+agreement and an explicit acceptance process approved by the owner must be
+introduced before the contribution policy changes.

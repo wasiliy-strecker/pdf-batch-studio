@@ -4,6 +4,7 @@ import de.appfabrik.pdfbatch.core.BatchJob;
 import de.appfabrik.pdfbatch.core.FieldMapping;
 import de.appfabrik.pdfbatch.core.JobConfiguration;
 import de.appfabrik.pdfbatch.core.PdfBatchException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -18,6 +19,7 @@ public final class DesktopViewModel implements AutoCloseable {
     private Path outputPath;
     private Path exportedPath;
     private byte[] previewPng;
+    private boolean folderExport;
     private String errorCode;
     private String errorMessage;
 
@@ -49,10 +51,34 @@ public final class DesktopViewModel implements AutoCloseable {
 
     public synchronized DesktopSnapshot preview(
             List<FieldMapping> mappings, String filenamePattern) {
+        return preview(mappings, filenamePattern, 0, 0);
+    }
+
+    public synchronized DesktopSnapshot preview(
+            List<FieldMapping> mappings, String filenamePattern, int row, int page) {
         clearError();
         job = workflow.configure(mappings, filenamePattern);
-        previewPng = previewRenderer.renderFirstPage(workflow.preview());
+        previewPng = previewRenderer.render(workflow.preview(row), page);
         return snapshot();
+    }
+
+    public synchronized DesktopSnapshot start(Path destination, boolean folder) {
+        folderExport = folder;
+        return start(destination);
+    }
+
+    public synchronized void passwords(String templatePassword, String outputPassword) {
+        workflow.passwords(templatePassword, outputPassword);
+    }
+
+    public synchronized void project(String id) {
+        workflow.project(id);
+    }
+
+    public synchronized List<de.appfabrik.pdfbatch.document.PdfCsvDocumentEngine.ValidationIssue>
+            preflight(List<FieldMapping> mappings, String pattern) {
+        job = workflow.configure(mappings, pattern);
+        return workflow.preflight();
     }
 
     public synchronized DesktopSnapshot start(Path destination) {
@@ -83,13 +109,19 @@ public final class DesktopViewModel implements AutoCloseable {
         return snapshot();
     }
 
+    public synchronized DesktopSnapshot exportResult(Path destination, boolean folder) {
+        outputPath = destination.toAbsolutePath().normalize();
+        folderExport = folder;
+        return exportResult();
+    }
+
     public synchronized DesktopSnapshot exportResult() {
         clearError();
         if (outputPath == null) {
             throw new PdfBatchException(
                     "DESKTOP_OUTPUT_REQUIRED", "Choose where to save the result ZIP");
         }
-        job = workflow.exportResult(outputPath);
+        job = workflow.exportResult(outputPath, folderExport);
         exportedPath = outputPath;
         return snapshot();
     }
@@ -122,9 +154,10 @@ public final class DesktopViewModel implements AutoCloseable {
             errorMessage = illegalArgumentException.getMessage();
         } else {
             errorCode = "DESKTOP_OPERATION_FAILED";
-            errorMessage = cause.getMessage() == null
-                    ? "The desktop operation failed"
-                    : cause.getMessage();
+            errorMessage =
+                    cause.getMessage() == null
+                            ? "The desktop operation failed"
+                            : cause.getMessage();
         }
         return snapshot();
     }

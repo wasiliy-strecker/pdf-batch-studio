@@ -31,7 +31,8 @@ flowchart LR
 - fixed upload and request-size limits plus independent stream limits
 - generated UUID directories and fixed internal filenames
 - normalized storage paths and no use of original filenames as filesystem paths
-- rejection of invalid, encrypted, or password-protected PDFs
+- server rejection of encrypted input, desktop password/permission checks
+- rejection of XFA and signed templates in the desktop workflow
 - AcroForm page, field, field-value, and CSV row limits
 - strict UTF-8 decoding and delimiter/header/row validation
 - streaming CSV processing and one-PDF-at-a-time output
@@ -43,8 +44,9 @@ flowchart LR
 - CSP, `X-Content-Type-Options`, and Spring Security defaults
 - generic processing failures in persisted public status
 - placeholder-only `.env.example`
-- desktop operation without HTTP, telemetry, accounts, or persistent database
-- per-launch desktop temporary root and atomic result export where supported
+- desktop operation without HTTP, telemetry or accounts
+- local JDBC transactions, foreign keys, versioned migrations and an application lock
+- managed desktop workspace and staged export without overwriting existing files
 - desktop cleanup after export, cancellation, failure, and normal shutdown
 
 ## Residual risks and deployment assumptions
@@ -57,11 +59,16 @@ flowchart LR
   unlimited public upload service.
 - Local files are not encrypted by the application. Use encrypted disks and
   appropriate host permissions where documents are sensitive.
-- A crash can leave an in-progress job until cleanup. Startup reconciliation is
-  a roadmap item.
-- An operating-system or power crash can leave a desktop session directory in
-  the system temporary area. It contains only the files selected for that local
-  job and is never uploaded by the application.
+- A server crash can leave an in-progress job until cleanup. Server startup
+  reconciliation is a roadmap item.
+- A crash can leave files in the desktop workspace. The next exclusive startup
+  clears this workspace and marks incomplete history as interrupted. It does
+  not resume processing automatically.
+- SQLite, saved templates and project names are ordinary local files. Output
+  password protection does not encrypt the application database or history.
+- Project archives accept exactly two bounded entries with fixed names. XLSX
+  uses POI ZIP/XML protections, row/cell limits and bounded normalized output.
+- Passwords are held in memory only. JVM memory is not a secure password vault.
 - Malware scanning, sandboxed document workers, rate limiting, and audit logs
   are outside the current local MVP.
 
@@ -74,5 +81,5 @@ bundled secret or phone-home mechanism.
 
 ## Supported versions
 
-Until the first tagged release, only the latest `main` commit receives security
-fixes. This section should be updated when release branches exist.
+The current development line receives security fixes. Tagged artifacts must be
+rebuilt to include dependency or runtime security updates.

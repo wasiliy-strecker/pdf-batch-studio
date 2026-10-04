@@ -1,28 +1,11 @@
-# License decision: PolyForm Noncommercial 1.0.0
+# License decision: Apache 2.0
 
-PDF Batch Studio is source-available under the unmodified PolyForm
-Noncommercial License 1.0.0. It is not presented as open-source software.
+The copyright owner approved Apache License 2.0 for original PDF Batch Studio
+code and documentation on 2026-10-04. Personal and commercial use, modification
+and redistribution are permitted under that license. No paid edition, runtime
+license key or recruitment-only exception is required.
 
-## Product goals
-
-The public repository should be straightforward for individuals to study,
-build, test, and use for purposes allowed by PolyForm while preserving the
-owner's ability to require a commercial agreement for business use. The public
-build therefore contains the complete application and no runtime license gate.
-
-## Supplemental documents
-
-- `EVALUATION-GRANT.md` permits narrowly scoped internal technical and
-  recruitment evaluation by commercial organizations.
-- `COMMERCIAL-LICENSE.md` explains how to request commercial rights and grants
-  no rights by itself.
-- `NOTICE` contains the required copyright notice.
-- `THIRD_PARTY_NOTICES.md` identifies important bundled dependencies that remain
-  under their own licenses.
-
-Outside code contributions are not accepted by default because unclear
-ownership can prevent consistent future commercial licensing.
-
-This is an engineering decision record, not legal advice. The supplemental
-evaluation grant and future commercial agreement should receive qualified legal
-review before commercial launch.
+Earlier releases retain their original notices. This release replaces the
+previous PolyForm Noncommercial policy. Third-party components retain their
+respective licenses. Preserve LICENSE, NOTICE and THIRD_PARTY_NOTICES.md when
+packaging the application.

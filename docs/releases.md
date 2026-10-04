@@ -22,31 +22,34 @@ decrease it between native package releases.
 
 The server command produces an executable JAR, a Docker Compose ZIP, and an
 aggregate CycloneDX JSON SBOM below `target/release/`. Desktop application
-images include the project license, required notice, evaluation grant,
-commercial licensing information, and third-party notices.
+images include Apache License 2.0, the project notice and third-party notices.
+The Linux build also creates a Debian package when `fakeroot` is installed.
 
 ## GitHub Actions
 
 The `Release packages` workflow can be run manually without publishing a
 release. A tag matching `v*` additionally:
 
-1. checks that all tests and the container build pass;
-2. builds server, Linux, Windows, and both macOS architectures;
-3. publishes the versioned and `latest` images to GHCR;
-4. merges the platform artifacts;
-5. creates `SHA256SUMS`;
+1. checks that all tests and the container build pass.
+2. builds server, Linux, Windows, and both macOS architectures.
+3. publishes the versioned and `latest` images to GHCR.
+4. merges the platform artifacts.
+5. creates `SHA256SUMS`.
 6. creates the GitHub release with all downloads.
 
 The initial packages are unsigned. Signing certificates, Apple notarization,
 and their credentials must be added only through protected repository secrets
 after the unsigned pipeline is stable.
 
-## First publication checklist
+## Desktop 1.0 publication checklist
 
-- create `wasiliy-strecker/pdf-batch-studio` as a public repository;
-- enable GitHub Discussions for commercial licensing contact;
-- push `main` and wait for `Verify` to pass;
-- run `Release packages` manually and inspect every artifact;
-- set `studio.version` and tag `v0.1.0` only after approval;
-- make the first GHCR package public after its initial tagged publication;
+- review the local changes and wait for `Verify` after the authorized push.
+- run `Release packages` manually and inspect every artifact.
+- exercise the built-in example, project reopening and export on each target OS.
+- tag `v1.0.0` only when publication is requested and platform checks pass.
+- confirm that release downloads and the GHCR package are publicly accessible.
 - verify the release checksums and container pull instructions.
+
+Building locally does not publish a GitHub release. Linux packages can be
+verified on Linux. Windows and macOS require their own runners and installation
+checks before claiming platform validation.

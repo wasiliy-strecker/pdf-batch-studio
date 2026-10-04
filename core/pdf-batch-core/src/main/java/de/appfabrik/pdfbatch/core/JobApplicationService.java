@@ -68,6 +68,10 @@ public final class JobApplicationService {
     }
 
     public byte[] preview(UUID id) {
+        return preview(id, 0);
+    }
+
+    public byte[] preview(UUID id, int rowIndex) {
         BatchJob job = get(id);
         if (job.status() != JobStatus.READY) {
             throw new InvalidJobStateException(job.status(), "generate a preview");
@@ -75,11 +79,7 @@ public final class JobApplicationService {
         try (InputStream pdfInput = workspace.openTemplate(id);
                 InputStream csvInput = workspace.openCsv(id)) {
             return documentEngine.preview(
-                    pdfInput,
-                    csvInput,
-                    job.csvDelimiter(),
-                    job.configuration(),
-                    limits);
+                    pdfInput, csvInput, job.csvDelimiter(), job.configuration(), limits, rowIndex);
         } catch (java.io.IOException exception) {
             throw new PdfBatchException(
                     "STORAGE_READ_FAILED", "Could not read the uploaded documents", exception);
@@ -140,13 +140,14 @@ public final class JobApplicationService {
         List<BatchJob> jobs = repository.findExpiredBefore(now);
         return jobs.stream()
                 .filter(job -> !job.status().isActive())
-                .map(job -> {
-                    job.expire(now);
-                    repository.save(job);
-                    workspace.deleteJob(job.id());
-                    repository.deleteById(job.id());
-                    return job.id();
-                })
+                .map(
+                        job -> {
+                            job.expire(now);
+                            repository.save(job);
+                            workspace.deleteJob(job.id());
+                            repository.deleteById(job.id());
+                            return job.id();
+                        })
                 .toList();
     }
 }

@@ -56,14 +56,13 @@ mkdir -p "$INPUT/legal" "$IMAGE_DEST" "$PACKAGE_DEST" "$DIST"
   -pl desktop/pdf-batch-desktop dependency:copy-dependencies \
   -DincludeScope=runtime -DoutputDirectory="$INPUT"
 cp "$MODULE/target/$MAIN_JAR" "$INPUT/$MAIN_JAR"
-cp "$ROOT/LICENSE" "$ROOT/NOTICE" "$ROOT/EVALUATION-GRANT.md" \
-  "$ROOT/COMMERCIAL-LICENSE.md" "$ROOT/THIRD_PARTY_NOTICES.md" "$INPUT/legal/"
+cp "$ROOT/LICENSE" "$ROOT/NOTICE" "$ROOT/THIRD_PARTY_NOTICES.md" "$INPUT/legal/"
 
 common=(
   --name "$APP_NAME"
   --app-version "$PACKAGE_VERSION"
   --vendor "Wasiliy Strecker"
-  --description "Offline PDF batch generation from AcroForm templates and CSV data"
+  --description "Offline PDF automation with projects, CSV and Excel"
   --copyright "Copyright 2026 Wasiliy Strecker"
   --input "$INPUT"
   --main-jar "$MAIN_JAR"
@@ -104,6 +103,17 @@ elif [[ "$PACKAGE_TYPE" == "linux" ]]; then
   target="$DIST/pdf-batch-studio-desktop-$APP_VERSION-linux-$architecture.tar.gz"
   tar -C "$IMAGE_DEST" -czf "$target" "$APP_NAME"
   printf 'Created %s\n' "$target"
+  if command -v fakeroot >/dev/null 2>&1; then
+    "$JAVA_HOME/bin/jpackage" --type deb --name pdf-batch-studio \
+      --app-image "$IMAGE_DEST/$APP_NAME" --app-version "$PACKAGE_VERSION" \
+      --vendor "Wasiliy Strecker" --dest "$PACKAGE_DEST" \
+      --linux-package-name pdf-batch-studio --linux-menu-group Office \
+      --linux-shortcut --linux-package-deps "libgtk-3-0 | libgtk-3-0t64, libgl1, fontconfig" \
+      --license-file "$ROOT/LICENSE"
+    generated=$(find "$PACKAGE_DEST" -maxdepth 1 -type f -name '*.deb' -print -quit)
+    test -n "$generated"
+    mv "$generated" "$DIST/pdf-batch-studio-desktop-$APP_VERSION-linux-$architecture.deb"
+  fi
 else
   printf 'Created and smoke-tested %s\n' "$IMAGE_DEST/$APP_NAME"
 fi

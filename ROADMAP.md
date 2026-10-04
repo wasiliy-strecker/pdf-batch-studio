@@ -1,32 +1,21 @@
 # Roadmap
 
-## Studio v0.1 release candidate
+## Desktop 1.0
 
-- validate the PostgreSQL Testcontainers suite in CI with Docker access
-- build all native desktop and server release artifacts from one version
-- publish checksums, CycloneDX SBOMs, and reviewed third-party notices
-- add startup reconciliation for interrupted queued and processing jobs
-- add dependency, container, and source vulnerability scans
-- tag `v0.1.0` only after the public repository and release workflow are ready
+The desktop scope is implemented: local projects and history, CSV/XLSX,
+AcroForm automation, preflight, page/record preview, protected documents,
+ZIP/folder output and German/English operation. See README for limitations.
 
-## Product workflow
+Before publishing, inspect native installers on their target operating systems
+and review dependency notices and release checksums. Signing and Apple
+notarization require owner-provided certificates through protected CI secrets.
 
-- saved templates, field mappings, and filename presets
-- searchable processing history and configurable retention
-- native drag-and-drop and remembered non-sensitive desktop preferences
-- optional server-sent events with polling retained as a tested fallback
-- authentication, ownership, API keys, and rate limiting for public hosting
-- accessibility audit and broader browser/desktop workflow coverage
+## Later versions
 
-## Advanced document automation
+- visual placement of fields on non-form PDFs
+- OCR and certificate-backed digital signatures
+- command-line automation and watched folders
+- optional authenticated team/server workflows
+- Android and iOS as a separately planned mobile implementation
 
-- flat-PDF text and image overlays
-- signatures, QR codes, barcodes, and conditional content
-- ZIP and batch-folder input
-- webhooks, object storage, team workspaces, and audit events
-- separately deployable workers through the existing ports
-- code signing, Apple notarization, and opt-in desktop update checks
-
-All application capabilities remain part of the Studio codebase. Commercial
-rights, hosted service, support, and signed distribution can be offered under a
-separate agreement without maintaining a reduced public edition.
+These features are not part of desktop 1.0.

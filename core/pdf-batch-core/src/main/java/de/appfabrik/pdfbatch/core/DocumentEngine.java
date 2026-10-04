@@ -14,6 +14,19 @@ public interface DocumentEngine {
             JobConfiguration configuration,
             DocumentLimits limits);
 
+    default byte[] preview(
+            InputStream pdf,
+            InputStream csv,
+            char delimiter,
+            JobConfiguration configuration,
+            DocumentLimits limits,
+            int rowIndex) {
+        if (rowIndex != 0) {
+            throw new IllegalArgumentException("Only the first row is supported");
+        }
+        return preview(pdf, csv, delimiter, configuration, limits);
+    }
+
     ProcessingSummary process(
             InputStream pdf,
             InputStream csv,

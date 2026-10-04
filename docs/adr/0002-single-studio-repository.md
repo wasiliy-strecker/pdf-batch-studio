@@ -6,10 +6,10 @@
 ## Decision
 
 Maintain the shared engine, Spring Boot server, and offline JavaFX application
-in one source-available repository. Build both delivery applications from the
-same versioned core. Use licensing terms, not duplicated source or runtime
-feature gates, to distinguish permitted noncommercial evaluation from
-commercial use.
+in one open-source repository. Build both delivery applications from the
+same versioned core. As updated for desktop 1.0 on 2026-10-04, Apache License
+2.0 permits both personal and commercial use. There are no paid editions or
+runtime feature gates.
 
 ## Consequences
 

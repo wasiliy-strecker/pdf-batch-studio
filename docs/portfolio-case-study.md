@@ -26,7 +26,9 @@ machine-readable and human-readable reports.
 - `jpackage` app images and CI-native Windows/macOS installer builds
 - reproducible safe PDF fixture generation
 - complete source-available server and desktop products over one shared core
-- dual-licensing boundary without runtime feature degradation or phone-home
+- Apache-2.0 distribution for private and business use without license gates
+- SQLite transactions and migrations, reusable projects and interruption history
+- SAX-based Excel import, typed form validation and protected PDF processing
 
 ## Validation
 

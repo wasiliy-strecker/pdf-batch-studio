@@ -7,6 +7,16 @@ Changelog, and releases will use semantic versioning.
 
 ### Added
 
+- Desktop 1.0 home screen with two offline examples, saved projects,
+  portable project archives, German/English UI and processing history.
+- SQLite/JDBC storage with Flyway migrations, normalized project tables,
+  exclusive application locking and interrupted-run recovery.
+- XLSX worksheet import, TSV support, data preview, mapping suggestions,
+  preflight, selected-record/page PDF preview and zoom.
+- Desktop checkbox, dropdown and radio fields, protected input and optional
+  AES-256 output protection with session-only passwords.
+- Safe folder export alongside ZIP export, retry after destination errors,
+  row-specific error history and Debian/Ubuntu installation packages.
 - Configurable 10,000-row safety default plus bounded server worker, queue, and
   active-job capacities without edition-based restrictions.
 - Unified Windows, macOS, Linux, server-JAR, Docker/GHCR, checksum, and
@@ -25,5 +35,11 @@ Changelog, and releases will use semantic versioning.
 - zero-setup local H2 profile and PostgreSQL Docker Compose profile.
 - Flyway persistence, safe samples, automated semantic PDF/ZIP tests, real HTTP
   end-to-end test, and optional PostgreSQL Testcontainers verification.
-- PolyForm Noncommercial licensing, recruitment evaluation grant, commercial
-  licensing boundary, third-party notices, security model, and architecture.
+- Third-party notices, security model and architecture documentation.
+
+### Changed
+
+- License original project code and documentation under Apache License 2.0 for
+  free personal and commercial use. Remove evaluation and commercial grants.
+- Set the desktop product version to 1.0.0 and native installer metadata to
+  1.0.1. Preserve the established server API and default document behavior.

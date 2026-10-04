@@ -19,8 +19,8 @@ production endpoints, or private documents. Safe generated fixtures belong in
 - `desktop/pdf-batch-desktop`: JavaFX UI and offline desktop adapters.
 
 Dependencies point inward. Core must not import Spring, JPA, PDFBox, JavaFX, or
-web types. Desktop must not depend on Spring, JPA, a database, or a network
-client. Keep queues, workers, document limits, and file lifecycles bounded and
+web types. Desktop uses SQLite through JDBC and Flyway for local persistence. It must
+not depend on Spring, JPA, or a network client. Keep queues, workers, document limits, and file lifecycles bounded and
 configurable.
 
 ## Commands
@@ -51,7 +51,7 @@ and desktop workflow tests must pass.
   deterministic ZIP entry names, and idempotent cleanup.
 - Update `CHANGELOG.md`, architecture/security docs, and safe screenshots for
   user-visible changes.
-- Keep original product code under PolyForm Noncommercial 1.0.0 and retain the
-  required notice and all third-party notices.
+- Keep original product code under Apache License 2.0 and retain the
+  copyright and all third-party notices.
 - Do not accept outside code contributions until the owner has approved an
   appropriate contributor agreement.

@@ -68,12 +68,14 @@ jobs:
           distribution: temurin
           java-version: "21"
           cache: maven
+      - name: Install Debian packaging tools
+        run: sudo apt-get update && sudo apt-get install -y fakeroot
       - name: Package and smoke-test Linux desktop
         run: ./scripts/package-desktop.sh linux
       - uses: actions/upload-artifact@v7
         with:
           name: release-desktop-linux-x64
-          path: desktop/pdf-batch-desktop/target/desktop-dist/*.tar.gz
+          path: desktop/pdf-batch-desktop/target/desktop-dist/*
           if-no-files-found: error
 
   windows:

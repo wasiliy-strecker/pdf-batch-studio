@@ -1,30 +1,39 @@
 # PDF Batch Studio
 
-PDF Batch Studio turns rows from a UTF-8 CSV file into personalized PDFs.
-It is available as a self-hosted Spring Boot web application and as a fully
-offline JavaFX desktop application for Windows, macOS, and Linux. Both inspect an
-interactive AcroForm template, map CSV columns to text fields, preview the first
-record, and create a ZIP archive.
+PDF Batch Studio creates personalized PDFs from a template and a spreadsheet.
+The JavaFX desktop application works completely offline on Windows, macOS and
+Linux. It is free for personal and business use under Apache License 2.0.
 
-The public source tree contains the complete product. It has no runtime license
-check, watermark, payment integration, or unavailable dependency. Permitted use
-is governed by the source-available license described below.
+## Desktop 1.0
 
-## What works
+- two built-in examples with generated, non-sensitive documents
+- saved projects, reusable mappings and portable `.pdfbatch` project archives
+- CSV, TSV and XLSX import with worksheet selection and a 50-row data preview
+- AcroForm text fields, checkboxes, dropdowns and radio buttons
+- suggested column mappings that users review before processing
+- preflight with record-specific errors, record/page preview and zoom
+- background processing, progress, cancellation and partial success
+- collision-safe filenames, ZIP or new-folder export, manifest and error report
+- password-protected templates with appropriate permissions and optional AES-256 output encryption
+- local SQLite project storage and processing history, including interrupted runs
+- German and English interface, file drag-and-drop and keyboard controls
+- no account, network connection or separately installed Java runtime required
 
-- AcroForm text-field inspection and filling with Apache PDFBox
-- comma, semicolon, and tab-delimited UTF-8 CSV files
-- manual CSV-to-PDF field mapping
-- filename patterns such as `{customerId}-{name}.pdf`
-- first-row PDF preview
-- asynchronous jobs with polling, progress, cancellation, and partial success
-- configurable processing safety limits with a 10,000-row default
-- ZIP results with `documents/*.pdf`, `manifest.json`, and `errors.csv`
-- bounded, configurable server workers, queue capacity, and active-job capacity
-- automatic one-hour retention and idempotent cleanup
-- local H2 persistence for zero-setup testing
-- PostgreSQL, Docker Compose, Flyway, REST/OpenAPI, and a responsive web UI
-- native JavaFX desktop UI with no server, database, account, or network access
+Open an example on the start screen, review the suggested mappings and preview,
+then select **Generate PDFs** and a new output location. For repeated work, save
+a named project and select a new table on the next run.
+
+Input templates must be standard AcroForms. Plain PDFs without fields, XFA,
+signed templates, OCR and creating new form fields are outside this version.
+Checkbox data accepts `true/false`, `yes/no`, `ja/nein` or `1/0`. Choice fields
+accept the template's option values. Font/length problems are reported during
+preflight. XLSX uses cached formula results, not formula evaluation. Recalculate
+and save spreadsheets before importing them when their formulas have changed.
+
+The self-hosted Spring Boot server continues to support the established CSV
+and text-field workflow through `/api/v1`. Desktop-only options do not change
+the server API. The shared Java processing engine remains framework-free at
+its application boundary.
 
 ## Release downloads
 
@@ -36,12 +45,12 @@ One version produces separate, clearly named downloads from the same source:
 | Apple Silicon desktop | `pdf-batch-studio-desktop-<version>-macos-arm64.dmg` |
 | Intel macOS desktop | `pdf-batch-studio-desktop-<version>-macos-x64.dmg` |
 | Linux desktop | `pdf-batch-studio-desktop-<version>-linux-x64.tar.gz` |
+| Debian / Ubuntu desktop | `pdf-batch-studio-desktop-<version>-linux-x64.deb` |
 | Standalone server | `pdf-batch-studio-server-<version>.jar` |
 | Docker server | `pdf-batch-studio-server-<version>-docker.zip` |
 
 Tagged releases also publish a versioned GHCR image, SHA-256 checksums, and a
-CycloneDX SBOM. Until the first tag is published, use the local start commands
-below.
+CycloneDX SBOM. Use the local start commands below to try the current source tree.
 
 ## Quick start: local web application
 
@@ -82,11 +91,19 @@ On Windows PowerShell:
 .\scripts\desktop-dev.ps1
 ```
 
-The desktop application runs the shared Java document engine directly. It does
-not start Spring Boot, open a network port, or use H2/PostgreSQL. Inputs are
-copied into an isolated operating-system temporary directory and removed after
-export, cancellation, failure, or normal application shutdown. Only the ZIP
-location selected by the user persists.
+The desktop application uses JavaFX, PDFBox, Commons CSV and Apache POI.
+SQLite and Flyway store projects and history locally, without Spring or a
+separate database server. Windows uses `%LOCALAPPDATA%/PDFBatchStudio`, macOS
+uses `~/Library/Application Support/PDFBatchStudio`, and Linux uses
+`$XDG_DATA_HOME/pdf-batch-studio` or `~/.local/share/pdf-batch-studio`.
+
+Saved projects retain the original template and configuration. Recipient tables
+and intermediate output are kept only in the managed session workspace and
+removed after use or at the next startup. Passwords are never persisted. The
+database and stored templates are not encrypted by the application.
+
+Portable project files contain a versioned properties manifest and original
+PDF template. They do not contain recipient tables, results or passwords.
 
 ![PDF Batch Studio Desktop](docs/screenshots/pdf-batch-desktop.png)
 
@@ -98,7 +115,8 @@ Create and smoke-test a local application image with:
 ./scripts/package-desktop.sh app-image
 ```
 
-On Windows use `scripts/package-desktop.ps1`. Create the Linux archive with
+On Windows use `scripts/package-desktop.ps1`. Create the Linux archive and,
+when `fakeroot` is installed, the Debian package with
 `./scripts/package-desktop.sh linux`. The unified `Release packages` workflow
 creates all target-specific downloads. The first release packages are
 intentionally unsigned, so Windows SmartScreen or macOS Gatekeeper may show a
@@ -192,14 +210,15 @@ pdf-batch-studio/
 ```
 
 This directory is one independent Git repository. Server, desktop, and shared
-core are intentionally released together; see
+core are intentionally released together. See
 [`PRODUCT_STRUCTURE.md`](PRODUCT_STRUCTURE.md).
 
 ## Known limitations
 
-- AcroForm text fields only; checkboxes, signatures, image overlays, and flat
-  PDFs are not supported.
-- Resource limits remain configurable safeguards; desktop processing uses one
+- Desktop supports text, checkbox, choice and radio AcroForms. The server
+  currently supports text fields only. Neither delivery supports signing,
+  image overlays or creating fields in flat PDFs.
+- Resource limits remain configurable safeguards. Desktop processing uses one
   local worker and server processing defaults to two workers and a bounded queue.
 - Polling is used instead of server-sent events.
 - Anonymous access assumes a trusted local/self-hosted environment. Random job
@@ -212,13 +231,7 @@ core are intentionally released together; see
 
 Copyright (c) 2026 Wasiliy Strecker.
 
-Source-available under the PolyForm Noncommercial License 1.0.0. It is not open
-source. Recruitment and technical evaluation by companies is additionally
-permitted under [`EVALUATION-GRANT.md`](EVALUATION-GRANT.md). Other commercial
-use requires a separate written agreement; see
-[`COMMERCIAL-LICENSE.md`](COMMERCIAL-LICENSE.md).
-
-The required copyright notice is in [`NOTICE`](NOTICE), the licensing rationale
-is recorded in [`LICENSE-DECISION.md`](LICENSE-DECISION.md), and bundled
-dependencies remain under the licenses listed in
-[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+Original project code and documentation are licensed under [Apache License 2.0](LICENSE).
+Personal and commercial use, modification and redistribution are permitted
+under its terms. Third-party components retain their own licenses, listed in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

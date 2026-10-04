@@ -53,14 +53,14 @@ New-Item $InputDirectory, $LegalDirectory, $ImageDestination, $PackageDestinatio
     -DincludeScope=runtime "-DoutputDirectory=$InputDirectory"
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Copy-Item (Join-Path $Module "target\$MainJar") (Join-Path $InputDirectory $MainJar)
-@("LICENSE", "NOTICE", "EVALUATION-GRANT.md", "COMMERCIAL-LICENSE.md", "THIRD_PARTY_NOTICES.md") |
+@("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md") |
     ForEach-Object { Copy-Item (Join-Path $Root $_) $LegalDirectory }
 
 $Common = @(
     "--name", $AppName,
     "--app-version", $PackageVersion,
     "--vendor", "Wasiliy Strecker",
-    "--description", "Offline PDF batch generation from AcroForm templates and CSV data",
+    "--description", "Offline PDF automation with projects, CSV and Excel",
     "--copyright", "Copyright 2026 Wasiliy Strecker",
     "--input", $InputDirectory,
     "--main-jar", $MainJar,

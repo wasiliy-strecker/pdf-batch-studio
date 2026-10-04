@@ -13,7 +13,7 @@
 
   <groupId>de.appfabrik.pdfbatch</groupId>
   <artifactId>pdf-batch-studio</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>PDF Batch Studio</name>
@@ -22,8 +22,8 @@
 
   <licenses>
     <license>
-      <name>PolyForm Noncommercial License 1.0.0</name>
-      <url>https://polyformproject.org/licenses/noncommercial/1.0.0/</url>
+      <name>Apache License 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -42,8 +42,8 @@
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <studio.version>0.1.0</studio.version>
-    <native.package.version>1.0.0</native.package.version>
+    <studio.version>1.0.0</studio.version>
+    <native.package.version>1.0.1</native.package.version>
     <cyclonedx-maven-plugin.version>2.9.2</cyclonedx-maven-plugin.version>
     <pdfbox.version>3.0.8</pdfbox.version>
     <commons-csv.version>1.14.1</commons-csv.version>

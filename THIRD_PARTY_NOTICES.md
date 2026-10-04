@@ -1,14 +1,14 @@
 # Third-party notices
 
 PDF Batch Studio includes and depends on third-party software. Those components
-remain under their own licenses; the PolyForm license applies only to original
-PDF Batch Studio material owned by the licensor.
+remain under their own licenses. Original PDF Batch Studio material is licensed
+under Apache License 2.0.
 
 Important runtime and distribution components include:
 
 | Component family | Primary license |
 | --- | --- |
-| Apache PDFBox and Apache Commons CSV | Apache License 2.0 |
+| Apache PDFBox, Apache Commons CSV and Apache POI | Apache License 2.0 |
 | Spring Boot, Spring Framework, embedded Apache Tomcat, Jackson | Apache License 2.0 |
 | springdoc-openapi | Apache License 2.0 |
 | htmx | Zero-Clause BSD |
@@ -19,6 +19,9 @@ Important runtime and distribution components include:
 | H2 Database Engine | MPL 2.0 or EPL 1.0 |
 | Logback | EPL 1.0 or GNU LGPL 2.1 |
 | Maven Wrapper | Apache License 2.0 |
+| Xerial SQLite JDBC | Apache License 2.0 and BSD-2-Clause |
+| SQLite | Public domain |
+| Eclipse Temurin runtime | GPL v2 with the Classpath Exception |
 
 Exact versions are pinned by the Maven build and recorded in the aggregate
 CycloneDX JSON SBOM created by `scripts/package-server.sh`. Transitive

@@ -42,8 +42,7 @@ cp "$ROOT/target/pdf-batch-studio.cdx.json" \
 
 cp "$ROOT/distribution/server/compose.yml" "$ROOT/distribution/server/README.md" \
   "$ROOT/distribution/server/.env.example" "$BUNDLE/"
-cp "$ROOT/LICENSE" "$ROOT/NOTICE" "$ROOT/EVALUATION-GRANT.md" \
-  "$ROOT/COMMERCIAL-LICENSE.md" "$ROOT/THIRD_PARTY_NOTICES.md" "$BUNDLE/"
+cp "$ROOT/LICENSE" "$ROOT/NOTICE" "$ROOT/THIRD_PARTY_NOTICES.md" "$BUNDLE/"
 sed -i "s/@STUDIO_VERSION@/$STUDIO_VERSION/g" "$BUNDLE/.env.example"
 
 "$JAVA_HOME/bin/jar" --create \
